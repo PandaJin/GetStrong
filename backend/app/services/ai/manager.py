@@ -1,7 +1,6 @@
 import logging
 
 from app.services.ai.base import AIProvider
-from app.services.ai.gemini_provider import GeminiProvider
 from app.services.ai.kimi_provider import KimiProvider
 
 logger = logging.getLogger(__name__)
@@ -18,7 +17,13 @@ class AIServiceManager:
             if name == "kimi":
                 self._providers["kimi"] = KimiProvider()
             elif name == "gemini":
-                self._providers["gemini"] = GeminiProvider()
+                # 懒加载 Gemini（需要安装 google-generativeai）
+                try:
+                    from app.services.ai.gemini_provider import GeminiProvider
+                    self._providers["gemini"] = GeminiProvider()
+                except ImportError:
+                    logger.warning("google-generativeai not installed, falling back to Kimi")
+                    self._providers["gemini"] = KimiProvider()
             else:
                 raise ValueError(f"Unknown AI provider: {name}")
         return self._providers[name]
