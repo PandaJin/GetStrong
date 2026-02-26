@@ -1,5 +1,9 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
 from app.core.exceptions import register_exception_handlers
@@ -38,3 +42,13 @@ app.include_router(stats.router, prefix=f"{settings.API_V1_PREFIX}/stats", tags=
 @app.get("/health")
 async def health_check():
     return {"status": "ok", "version": "1.0.0", "app": settings.APP_NAME}
+
+
+# Serve Web UI
+_static_dir = Path(__file__).resolve().parent.parent / "static"
+if _static_dir.is_dir():
+    @app.get("/")
+    async def index():
+        return FileResponse(_static_dir / "index.html")
+
+    app.mount("/static", StaticFiles(directory=str(_static_dir)), name="static")

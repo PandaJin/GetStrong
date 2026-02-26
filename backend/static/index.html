@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GetStrong - 智能健康管理</title>
+<style>
+/* ========== Reset & Variables ========== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #4F46E5;
+  --primary-light: #818CF8;
+  --primary-bg: #EEF2FF;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --bg: #F8FAFC;
+  --card: #FFFFFF;
+  --text: #1E293B;
+  --text-secondary: #64748B;
+  --border: #E2E8F0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========== Phone Frame ========== */
+.phone-frame {
+  width: 390px;
+  min-height: 100vh;
+  background: var(--bg);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ========== Pages ========== */
+.page { display: none; min-height: 100vh; padding-bottom: 80px; }
+.page.active { display: block; }
+
+/* ========== Auth Page ========== */
+.auth-page {
+  display: none;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #A855F7 100%);
+  padding: 60px 24px 40px;
+  flex-direction: column;
+  align-items: center;
+}
+.auth-page.active { display: flex; }
+
+.auth-logo {
+  width: 80px; height: 80px; background: rgba(255,255,255,0.2);
+  border-radius: 24px; display: flex; align-items: center; justify-content: center;
+  font-size: 36px; margin-bottom: 16px; backdrop-filter: blur(10px);
+}
+.auth-title { color: #fff; font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+.auth-subtitle { color: rgba(255,255,255,0.75); font-size: 15px; margin-bottom: 40px; }
+
+.auth-card {
+  width: 100%; background: #fff; border-radius: 24px; padding: 32px 24px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+.auth-tabs { display: flex; margin-bottom: 24px; background: #F1F5F9; border-radius: 12px; padding: 4px; }
+.auth-tab {
+  flex: 1; padding: 10px; text-align: center; border-radius: 10px; font-size: 15px;
+  font-weight: 600; cursor: pointer; transition: all 0.2s; color: var(--text-secondary);
+}
+.auth-tab.active { background: #fff; color: var(--primary); box-shadow: var(--shadow); }
+
+.input-group { margin-bottom: 16px; }
+.input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
+.input-group input {
+  width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: 12px;
+  font-size: 15px; outline: none; transition: border-color 0.2s;
+}
+.input-group input:focus { border-color: var(--primary); }
+
+.btn-primary {
+  width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none;
+  border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer;
+  transition: transform 0.1s, opacity 0.2s; margin-top: 8px;
+}
+.btn-primary:active { transform: scale(0.98); opacity: 0.9; }
+
+.auth-error { color: var(--danger); font-size: 13px; margin-top: 12px; text-align: center; min-height: 18px; }
+
+/* ========== Header ========== */
+.header {
+  padding: 16px 20px 12px; background: var(--card);
+  border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10;
+}
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+.header-greeting { font-size: 22px; font-weight: 700; }
+.header-date { font-size: 13px; color: var(--text-secondary); }
+.header-avatar {
+  width: 40px; height: 40px; background: var(--primary-bg); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer;
+}
+
+/* ========== Stats Cards ========== */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px 20px; }
+.stat-card {
+  background: var(--card); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow);
+}
+.stat-card.wide { grid-column: span 2; }
+.stat-icon { font-size: 24px; margin-bottom: 8px; }
+.stat-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+.stat-value { font-size: 24px; font-weight: 700; margin: 2px 0; }
+.stat-unit { font-size: 13px; color: var(--text-secondary); font-weight: 400; }
+.stat-sub { font-size: 12px; color: var(--text-secondary); }
+
+/* Calorie ring */
+.calorie-card { display: flex; align-items: center; gap: 20px; }
+.calorie-ring { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
+.calorie-ring svg { transform: rotate(-90deg); }
+.calorie-ring-text {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  text-align: center;
+}
+.calorie-ring-text .number { font-size: 20px; font-weight: 700; display: block; }
+.calorie-ring-text .label { font-size: 10px; color: var(--text-secondary); }
+.calorie-details { flex: 1; }
+.calorie-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+.calorie-row .val { font-weight: 600; }
+
+/* Macro bar */
+.macro-bar { display: flex; gap: 8px; margin-top: 10px; }
+.macro-item { flex: 1; text-align: center; }
+.macro-item .bar-bg { height: 6px; background: #E2E8F0; border-radius: 3px; overflow: hidden; margin: 6px 0; }
+.macro-item .bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+.macro-item .bar-fill.protein { background: #3B82F6; }
+.macro-item .bar-fill.fat { background: #F59E0B; }
+.macro-item .bar-fill.carbs { background: #10B981; }
+.macro-item .name { font-size: 11px; color: var(--text-secondary); }
+.macro-item .val { font-size: 13px; font-weight: 600; }
+
+/* ========== Section ========== */
+.section { padding: 0 20px 16px; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.section-title { font-size: 17px; font-weight: 700; }
+.section-action { font-size: 13px; color: var(--primary); font-weight: 600; cursor: pointer; }
+
+/* ========== Meal cards ========== */
+.meal-card {
+  background: var(--card); border-radius: var(--radius); padding: 14px 16px;
+  box-shadow: var(--shadow); margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.meal-left { display: flex; align-items: center; gap: 12px; }
+.meal-emoji { font-size: 28px; }
+.meal-name { font-size: 15px; font-weight: 600; }
+.meal-food { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+.meal-cal { font-size: 15px; font-weight: 700; color: var(--primary); }
+.meal-cal span { font-size: 11px; font-weight: 400; color: var(--text-secondary); }
+
+/* ========== Tab Bar ========== */
+.tab-bar {
+  position: fixed; bottom: 0; width: 390px; background: var(--card);
+  border-top: 1px solid var(--border); display: flex; padding: 8px 0 20px; z-index: 20;
+}
+.tab-bar.hidden { display: none; }
+.tab-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  cursor: pointer; font-size: 11px; color: var(--text-secondary); transition: color 0.2s;
+  background: none; border: none; -webkit-tap-highlight-color: transparent;
+}
+.tab-item.active { color: var(--primary); }
+.tab-item svg { width: 24px; height: 24px; }
+
+/* ========== Add Fab ========== */
+.fab {
+  width: 52px; height: 52px; background: var(--primary); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; margin-top: -20px;
+  box-shadow: 0 4px 14px rgba(79,70,229,0.4); border: none; cursor: pointer;
+}
+.fab svg { width: 28px; height: 28px; color: #fff; }
+
+/* ========== Modal ========== */
+.modal-overlay {
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4); z-index: 100; justify-content: center; align-items: flex-end;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--card); border-radius: 24px 24px 0 0; width: 390px;
+  max-height: 85vh; overflow-y: auto; padding: 24px;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; text-align: center; }
+.modal .input-group { margin-bottom: 14px; }
+
+.meal-type-select { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+.meal-type-btn {
+  padding: 10px 0; border: 2px solid var(--border); border-radius: 12px; background: none;
+  font-size: 13px; cursor: pointer; text-align: center; transition: all 0.2s;
+}
+.meal-type-btn.active { border-color: var(--primary); background: var(--primary-bg); color: var(--primary); font-weight: 600; }
+
+.nutrient-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+/* ========== Exercise Page ========== */
+.exercise-card {
+  background: var(--card); border-radius: var(--radius); padding: 16px;
+  box-shadow: var(--shadow); margin-bottom: 10px;
+}
+.exercise-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.exercise-icon { font-size: 24px; }
+.exercise-name { font-size: 15px; font-weight: 600; }
+.exercise-meta { display: flex; gap: 16px; }
+.exercise-meta span { font-size: 13px; color: var(--text-secondary); }
+.exercise-meta strong { color: var(--text); }
+
+/* ========== Profile Page ========== */
+.profile-header {
+  text-align: center; padding: 40px 20px 20px;
+  background: linear-gradient(135deg, #4F46E5, #7C3AED); color: #fff;
+}
+.profile-avatar {
+  width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center; font-size: 32px;
+  margin: 0 auto 12px; border: 3px solid rgba(255,255,255,0.3);
+}
+.profile-name { font-size: 20px; font-weight: 700; }
+.profile-phone { font-size: 13px; opacity: 0.7; margin-top: 4px; }
+
+.profile-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border);
+  margin: 0 20px; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+  transform: translateY(-20px);
+}
+.profile-stat {
+  background: var(--card); padding: 16px 8px; text-align: center;
+}
+.profile-stat .val { font-size: 20px; font-weight: 700; color: var(--primary); }
+.profile-stat .label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
+.profile-section { padding: 0 20px; margin-bottom: 16px; }
+.profile-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px; background: var(--card); border-radius: var(--radius-sm);
+  margin-bottom: 8px; box-shadow: var(--shadow); cursor: pointer;
+}
+.profile-item .left { display: flex; align-items: center; gap: 12px; }
+.profile-item .icon { font-size: 20px; }
+.profile-item .text { font-size: 15px; }
+.profile-item .arrow { color: var(--text-secondary); font-size: 18px; }
+
+.btn-logout {
+  width: calc(100% - 40px); margin: 20px; padding: 14px; background: #FEF2F2;
+  color: var(--danger); border: none; border-radius: 14px; font-size: 15px;
+  font-weight: 600; cursor: pointer;
+}
+
+/* ========== Sleep Page ========== */
+.sleep-card {
+  background: var(--card); border-radius: var(--radius); padding: 20px;
+  box-shadow: var(--shadow); margin-bottom: 12px; text-align: center;
+}
+.sleep-duration { font-size: 48px; font-weight: 700; color: var(--primary); }
+.sleep-duration span { font-size: 16px; color: var(--text-secondary); font-weight: 400; }
+.sleep-quality { display: flex; justify-content: center; gap: 4px; margin-top: 8px; }
+.sleep-star { font-size: 24px; cursor: pointer; }
+
+/* ========== Empty State ========== */
+.empty-state {
+  text-align: center; padding: 40px 20px; color: var(--text-secondary);
+}
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+.empty-state .text { font-size: 14px; }
+
+/* ========== Toast ========== */
+.toast {
+  position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
+  background: #1E293B; color: #fff; padding: 12px 24px; border-radius: 12px;
+  font-size: 14px; z-index: 200; opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; }
+
+/* ========== Body Metric ========== */
+.metric-input-row {
+  display: flex; gap: 10px; margin-bottom: 12px;
+}
+.metric-input-row input { flex: 1; }
+.metric-input-row .btn-sm {
+  padding: 12px 20px; background: var(--primary); color: #fff; border: none;
+  border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <!-- ===== Auth Page ===== -->
+  <div id="authPage" class="auth-page active">
+    <div class="auth-logo">💪</div>
+    <div class="auth-title">GetStrong</div>
+    <div class="auth-subtitle">你的智能健康管理伙伴</div>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <div class="auth-tab active" onclick="switchAuthTab('login')">登录</div>
+        <div class="auth-tab" onclick="switchAuthTab('register')">注册</div>
+      </div>
+      <div id="loginForm">
+        <div class="input-group">
+          <label>手机号</label>
+          <input type="tel" id="loginPhone" placeholder="请输入手机号" maxlength="11" value="13800138000">
+        </div>
+        <div class="input-group">
+          <label>密码</label>
+          <input type="password" id="loginPassword" placeholder="请输入密码" value="test123456">
+        </div>
+        <button class="btn-primary" onclick="doLogin()">登录</button>
+      </div>
+      <div id="registerForm" style="display:none;">
+        <div class="input-group">
+          <label>手机号</label>
+          <input type="tel" id="regPhone" placeholder="请输入手机号" maxlength="11">
+        </div>
+        <div class="input-group">
+          <label>昵称</label>
+          <input type="text" id="regNickname" placeholder="给自己取个名字">
+        </div>
+        <div class="input-group">
+          <label>密码</label>
+          <input type="password" id="regPassword" placeholder="至少6位密码">
+        </div>
+        <button class="btn-primary" onclick="doRegister()">注册</button>
+      </div>
+      <div class="auth-error" id="authError"></div>
+    </div>
+  </div>
+
+  <!-- ===== Home Page ===== -->
+  <div id="homePage" class="page">
+    <div class="header">
+      <div class="header-top">
+        <div>
+          <div class="header-greeting" id="greeting">早上好，</div>
+          <div class="header-date" id="todayDate"></div>
+        </div>
+        <div class="header-avatar" onclick="switchPage('profile')">👤</div>
+      </div>
+    </div>
+
+    <!-- Calorie overview -->
+    <div class="stats-grid">
+      <div class="stat-card wide">
+        <div class="calorie-card">
+          <div class="calorie-ring">
+            <svg width="90" height="90" viewBox="0 0 90 90">
+              <circle cx="45" cy="45" r="38" fill="none" stroke="#E2E8F0" stroke-width="8"/>
+              <circle id="calorieArc" cx="45" cy="45" r="38" fill="none" stroke="var(--primary)" stroke-width="8" stroke-linecap="round" stroke-dasharray="239" stroke-dashoffset="239"/>
+            </svg>
+            <div class="calorie-ring-text">
+              <span class="number" id="calConsumed">0</span>
+              <span class="label">已摄入</span>
+            </div>
+          </div>
+          <div class="calorie-details">
+            <div class="calorie-row"><span>目标</span><span class="val" id="calTarget">2000 kcal</span></div>
+            <div class="calorie-row"><span>已摄入</span><span class="val" id="calEaten">0 kcal</span></div>
+            <div class="calorie-row"><span>剩余</span><span class="val" id="calRemain">2000 kcal</span></div>
+            <div class="macro-bar">
+              <div class="macro-item">
+                <div class="name">蛋白质</div>
+                <div class="bar-bg"><div class="bar-fill protein" id="proteinBar" style="width:0%"></div></div>
+                <div class="val" id="proteinVal">0g</div>
+              </div>
+              <div class="macro-item">
+                <div class="name">脂肪</div>
+                <div class="bar-bg"><div class="bar-fill fat" id="fatBar" style="width:0%"></div></div>
+                <div class="val" id="fatVal">0g</div>
+              </div>
+              <div class="macro-item">
+                <div class="name">碳水</div>
+                <div class="bar-bg"><div class="bar-fill carbs" id="carbsBar" style="width:0%"></div></div>
+                <div class="val" id="carbsVal">0g</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card" onclick="switchPage('exercise')">
+        <div class="stat-icon">🏃</div>
+        <div class="stat-label">今日运动</div>
+        <div class="stat-value" id="exerciseMin">0<span class="stat-unit"> 分钟</span></div>
+        <div class="stat-sub" id="exerciseCal">消耗 0 kcal</div>
+      </div>
+      <div class="stat-card" onclick="switchPage('sleep')">
+        <div class="stat-icon">😴</div>
+        <div class="stat-label">昨晚睡眠</div>
+        <div class="stat-value" id="sleepHours">--<span class="stat-unit"> 小时</span></div>
+        <div class="stat-sub" id="sleepQuality">暂无记录</div>
+      </div>
+    </div>
+
+    <!-- Today meals -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">今日饮食</div>
+        <div class="section-action" onclick="openAddMeal()">+ 添加</div>
+      </div>
+      <div id="mealList">
+        <div class="empty-state"><div class="icon">🍽️</div><div class="text">今天还没有饮食记录<br>点击 + 开始记录</div></div>
+      </div>
+    </div>
+
+    <!-- Body metric -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">体重记录</div>
+      </div>
+      <div class="stat-card">
+        <div class="metric-input-row">
+          <input type="number" id="weightInput" placeholder="输入今日体重 (kg)" step="0.1">
+          <button class="btn-sm" onclick="recordWeight()">记录</button>
+        </div>
+        <div class="stat-sub" id="weightStatus">记录每日体重，跟踪变化趋势</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Exercise Page ===== -->
+  <div id="exercisePage" class="page">
+    <div class="header">
+      <div class="header-top">
+        <div class="header-greeting">运动记录</div>
+        <div class="section-action" onclick="openAddExercise()">+ 添加</div>
+      </div>
+    </div>
+    <div class="section" style="padding-top:16px;">
+      <div id="exerciseList">
+        <div class="empty-state"><div class="icon">🏋️</div><div class="text">今天还没有运动记录<br>开始你的第一个训练吧！</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Sleep Page ===== -->
+  <div id="sleepPage" class="page">
+    <div class="header">
+      <div class="header-top"><div class="header-greeting">睡眠记录</div></div>
+    </div>
+    <div class="section" style="padding-top:16px;">
+      <div class="sleep-card">
+        <div style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;">记录昨晚睡眠</div>
+        <div style="display:flex;gap:10px;margin-bottom:12px;">
+          <div class="input-group" style="flex:1;margin:0;">
+            <label>入睡时间</label>
+            <input type="time" id="sleepStart" value="23:00">
+          </div>
+          <div class="input-group" style="flex:1;margin:0;">
+            <label>起床时间</label>
+            <input type="time" id="sleepEnd" value="07:00">
+          </div>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:13px;font-weight:600;color:var(--text-secondary);">睡眠质量</label>
+          <div class="sleep-quality" id="sleepStars">
+            <span class="sleep-star" onclick="setSleepQuality(1)">⭐</span>
+            <span class="sleep-star" onclick="setSleepQuality(2)">⭐</span>
+            <span class="sleep-star" onclick="setSleepQuality(3)">⭐</span>
+            <span class="sleep-star" onclick="setSleepQuality(4)">☆</span>
+            <span class="sleep-star" onclick="setSleepQuality(5)">☆</span>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="recordSleep()">保存记录</button>
+      </div>
+      <div id="sleepHistory"></div>
+    </div>
+  </div>
+
+  <!-- ===== Profile Page ===== -->
+  <div id="profilePage" class="page" style="padding-bottom:100px;">
+    <div class="profile-header">
+      <div class="profile-avatar">💪</div>
+      <div class="profile-name" id="profileName">--</div>
+      <div class="profile-phone" id="profilePhone">--</div>
+    </div>
+    <div class="profile-stats">
+      <div class="profile-stat">
+        <div class="val" id="pHeight">--</div>
+        <div class="label">身高(cm)</div>
+      </div>
+      <div class="profile-stat">
+        <div class="val" id="pWeight">--</div>
+        <div class="label">体重(kg)</div>
+      </div>
+      <div class="profile-stat">
+        <div class="val" id="pGoal">--</div>
+        <div class="label">目标</div>
+      </div>
+    </div>
+    <div class="profile-section">
+      <div class="section-title" style="margin-bottom:12px;">个人设置</div>
+      <div class="profile-item" onclick="openEditProfile()">
+        <div class="left"><span class="icon">📏</span><span class="text">编辑身体数据</span></div>
+        <span class="arrow">›</span>
+      </div>
+      <div class="profile-item">
+        <div class="left"><span class="icon">🎯</span><span class="text">每日卡路里目标</span></div>
+        <span class="arrow" id="pCalTarget">2000 kcal ›</span>
+      </div>
+      <div class="profile-item">
+        <div class="left"><span class="icon">🤖</span><span class="text">AI 服务偏好</span></div>
+        <span class="arrow">Kimi ›</span>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="doLogout()">退出登录</button>
+  </div>
+
+  <!-- ===== Tab Bar ===== -->
+  <div class="tab-bar" id="tabBar">
+    <button class="tab-item active" onclick="switchPage('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      <span>首页</span>
+    </button>
+    <button class="tab-item" onclick="switchPage('exercise')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+      <span>运动</span>
+    </button>
+    <button class="tab-item" onclick="openAddMeal()">
+      <div class="fab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+      </div>
+    </button>
+    <button class="tab-item" onclick="switchPage('sleep')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      <span>睡眠</span>
+    </button>
+    <button class="tab-item" onclick="switchPage('profile')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>我的</span>
+    </button>
+  </div>
+
+  <!-- ===== Add Meal Modal ===== -->
+  <div class="modal-overlay" id="mealModal">
+    <div class="modal">
+      <div class="modal-title">添加饮食记录</div>
+      <div class="meal-type-select">
+        <button class="meal-type-btn active" data-type="breakfast" onclick="selectMealType(this)">🌅 早餐</button>
+        <button class="meal-type-btn" data-type="lunch" onclick="selectMealType(this)">☀️ 午餐</button>
+        <button class="meal-type-btn" data-type="dinner" onclick="selectMealType(this)">🌙 晚餐</button>
+        <button class="meal-type-btn" data-type="snack" onclick="selectMealType(this)">🍪 加餐</button>
+      </div>
+      <div class="input-group">
+        <label>食物名称</label>
+        <input type="text" id="foodName" placeholder="例如：鸡胸肉沙拉">
+      </div>
+      <div class="input-group">
+        <label>热量 (kcal)</label>
+        <input type="number" id="foodCalories" placeholder="0">
+      </div>
+      <div class="nutrient-grid">
+        <div class="input-group">
+          <label>蛋白质(g)</label>
+          <input type="number" id="foodProtein" placeholder="0" step="0.1">
+        </div>
+        <div class="input-group">
+          <label>脂肪(g)</label>
+          <input type="number" id="foodFat" placeholder="0" step="0.1">
+        </div>
+        <div class="input-group">
+          <label>碳水(g)</label>
+          <input type="number" id="foodCarbs" placeholder="0" step="0.1">
+        </div>
+      </div>
+      <button class="btn-primary" onclick="saveMeal()">保存</button>
+      <button class="btn-primary" onclick="closeMealModal()" style="background:#F1F5F9;color:var(--text);margin-top:8px;">取消</button>
+    </div>
+  </div>
+
+  <!-- ===== Add Exercise Modal ===== -->
+  <div class="modal-overlay" id="exerciseModal">
+    <div class="modal">
+      <div class="modal-title">添加运动记录</div>
+      <div class="input-group">
+        <label>运动名称</label>
+        <input type="text" id="exName" placeholder="例如：跑步、力量训练">
+      </div>
+      <div class="nutrient-grid">
+        <div class="input-group">
+          <label>时长(分钟)</label>
+          <input type="number" id="exDuration" placeholder="30">
+        </div>
+        <div class="input-group">
+          <label>消耗(kcal)</label>
+          <input type="number" id="exCalories" placeholder="200">
+        </div>
+        <div class="input-group">
+          <label>组数</label>
+          <input type="number" id="exSets" placeholder="0">
+        </div>
+      </div>
+      <button class="btn-primary" onclick="saveExercise()">保存</button>
+      <button class="btn-primary" onclick="closeExerciseModal()" style="background:#F1F5F9;color:var(--text);margin-top:8px;">取消</button>
+    </div>
+  </div>
+
+  <!-- ===== Edit Profile Modal ===== -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal">
+      <div class="modal-title">编辑身体数据</div>
+      <div class="nutrient-grid">
+        <div class="input-group">
+          <label>身高(cm)</label>
+          <input type="number" id="editHeight" placeholder="175" step="0.1">
+        </div>
+        <div class="input-group">
+          <label>体重(kg)</label>
+          <input type="number" id="editWeight" placeholder="70" step="0.1">
+        </div>
+        <div class="input-group">
+          <label>目标(kg)</label>
+          <input type="number" id="editTarget" placeholder="65" step="0.1">
+        </div>
+      </div>
+      <div class="input-group">
+        <label>健身目标</label>
+        <div class="meal-type-select">
+          <button class="meal-type-btn active" data-goal="lose_weight" onclick="selectGoal(this)">减脂</button>
+          <button class="meal-type-btn" data-goal="build_muscle" onclick="selectGoal(this)">增肌</button>
+          <button class="meal-type-btn" data-goal="maintain" onclick="selectGoal(this)">保持</button>
+          <button class="meal-type-btn" data-goal="improve_health" onclick="selectGoal(this)">健康</button>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="saveProfile()">保存</button>
+      <button class="btn-primary" onclick="closeProfileModal()" style="background:#F1F5F9;color:var(--text);margin-top:8px;">取消</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+const API = '/api/v1';
+let token = localStorage.getItem('gs_token') || '';
+let currentUser = null;
+let selectedMealType = 'breakfast';
+let selectedGoal = 'lose_weight';
+let sleepQualityVal = 3;
+
+// ===== Utility =====
+function headers() {
+  return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+}
+
+async function api(method, path, body) {
+  const opts = { method, headers: headers() };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API + path, opts);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || '请求失败');
+  return data;
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// ===== Auth =====
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t, i) => {
+    t.classList.toggle('active', (tab === 'login' ? i === 0 : i === 1));
+  });
+  document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('authError').textContent = '';
+}
+
+async function doLogin() {
+  try {
+    const data = await api('POST', '/auth/login', {
+      phone: document.getElementById('loginPhone').value,
+      password: document.getElementById('loginPassword').value,
+    });
+    token = data.data.access_token;
+    localStorage.setItem('gs_token', token);
+    enterApp();
+  } catch (e) {
+    document.getElementById('authError').textContent = e.message;
+  }
+}
+
+async function doRegister() {
+  try {
+    const data = await api('POST', '/auth/register', {
+      phone: document.getElementById('regPhone').value,
+      nickname: document.getElementById('regNickname').value,
+      password: document.getElementById('regPassword').value,
+    });
+    token = data.data.access_token;
+    localStorage.setItem('gs_token', token);
+    enterApp();
+  } catch (e) {
+    document.getElementById('authError').textContent = e.message;
+  }
+}
+
+function doLogout() {
+  token = '';
+  currentUser = null;
+  localStorage.removeItem('gs_token');
+  document.getElementById('authPage').classList.add('active');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('tabBar').classList.add('hidden');
+}
+
+// ===== Navigation =====
+function switchPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(name + 'Page').classList.add('active');
+  document.querySelectorAll('.tab-item').forEach((t, i) => {
+    const pages = ['home', 'exercise', null, 'sleep', 'profile'];
+    t.classList.toggle('active', pages[i] === name);
+  });
+  if (name === 'profile') loadProfile();
+}
+
+// ===== Enter App =====
+async function enterApp() {
+  document.getElementById('authPage').classList.remove('active');
+  document.getElementById('homePage').classList.add('active');
+  document.getElementById('tabBar').classList.remove('hidden');
+
+  // Set greeting
+  const hour = new Date().getHours();
+  const greet = hour < 12 ? '早上好' : hour < 18 ? '下午好' : '晚上好';
+
+  try {
+    const me = await api('GET', '/users/me');
+    currentUser = me.data;
+    document.getElementById('greeting').textContent = greet + '，' + (currentUser.nickname || '用户');
+  } catch {
+    document.getElementById('greeting').textContent = greet + '！';
+  }
+
+  const d = new Date();
+  const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+  document.getElementById('todayDate').textContent =
+    `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 星期${weekdays[d.getDay()]}`;
+
+  loadDashboard();
+}
+
+// ===== Dashboard =====
+async function loadDashboard() {
+  try {
+    const stats = await api('GET', `/stats/daily?date=${today()}`);
+    const s = stats.data;
+    const target = s.calorie_target || 2000;
+    const consumed = Math.round(s.calories_consumed || 0);
+    const remain = Math.max(0, target - consumed);
+    const pct = Math.min(consumed / target, 1);
+
+    document.getElementById('calConsumed').textContent = consumed;
+    document.getElementById('calTarget').textContent = target + ' kcal';
+    document.getElementById('calEaten').textContent = consumed + ' kcal';
+    document.getElementById('calRemain').textContent = remain + ' kcal';
+
+    // Animate ring
+    const arc = document.getElementById('calorieArc');
+    const circumference = 2 * Math.PI * 38;
+    arc.style.strokeDasharray = circumference;
+    arc.style.strokeDashoffset = circumference * (1 - pct);
+    if (pct > 0.9) arc.style.stroke = 'var(--danger)';
+    else if (pct > 0.7) arc.style.stroke = 'var(--warning)';
+    else arc.style.stroke = 'var(--primary)';
+
+    // Macros
+    const proteinTarget = 120, fatTarget = 60, carbsTarget = 250;
+    document.getElementById('proteinVal').textContent = Math.round(s.protein_g || 0) + 'g';
+    document.getElementById('fatVal').textContent = Math.round(s.fat_g || 0) + 'g';
+    document.getElementById('carbsVal').textContent = Math.round(s.carbs_g || 0) + 'g';
+    document.getElementById('proteinBar').style.width = Math.min(100, (s.protein_g||0)/proteinTarget*100) + '%';
+    document.getElementById('fatBar').style.width = Math.min(100, (s.fat_g||0)/fatTarget*100) + '%';
+    document.getElementById('carbsBar').style.width = Math.min(100, (s.carbs_g||0)/carbsTarget*100) + '%';
+
+    // Exercise
+    document.getElementById('exerciseMin').innerHTML = (s.exercise_minutes || 0) + '<span class="stat-unit"> 分钟</span>';
+    document.getElementById('exerciseCal').textContent = '消耗 ' + Math.round(s.calories_burned || 0) + ' kcal';
+
+    // Sleep
+    if (s.sleep_duration_minutes) {
+      const h = Math.floor(s.sleep_duration_minutes / 60);
+      const m = s.sleep_duration_minutes % 60;
+      document.getElementById('sleepHours').innerHTML = h + (m > 0 ? '.' + Math.round(m/6) : '') + '<span class="stat-unit"> 小时</span>';
+      document.getElementById('sleepQuality').textContent = '质量: ' + '⭐'.repeat(s.sleep_quality || 3);
+    }
+
+  } catch (e) {
+    console.error('Stats error:', e);
+  }
+
+  loadMeals();
+}
+
+// ===== Meals =====
+async function loadMeals() {
+  try {
+    const res = await api('GET', `/diet/daily-summary?record_date=${today()}`);
+    const d = res.data;
+    const mealList = document.getElementById('mealList');
+
+    const emojis = { breakfast: '🌅', lunch: '☀️', dinner: '🌙', snack: '🍪' };
+    const names = { breakfast: '早餐', lunch: '午餐', dinner: '晚餐', snack: '加餐' };
+
+    if (d.meal_count === 0) {
+      mealList.innerHTML = '<div class="empty-state"><div class="icon">🍽️</div><div class="text">今天还没有饮食记录<br>点击 + 开始记录</div></div>';
+      return;
+    }
+
+    let html = '';
+    for (const [type, foods] of Object.entries(d.meals)) {
+      for (const f of foods) {
+        html += `
+          <div class="meal-card">
+            <div class="meal-left">
+              <div class="meal-emoji">${emojis[type] || '🍽️'}</div>
+              <div>
+                <div class="meal-name">${names[type] || type}</div>
+                <div class="meal-food">${f.food_name}</div>
+              </div>
+            </div>
+            <div class="meal-cal">${Math.round(f.calories)} <span>kcal</span></div>
+          </div>`;
+      }
+    }
+    mealList.innerHTML = html;
+  } catch (e) {
+    console.error('Meals error:', e);
+  }
+}
+
+// ===== Add Meal =====
+function openAddMeal() {
+  document.getElementById('mealModal').classList.add('active');
+  document.getElementById('foodName').value = '';
+  document.getElementById('foodCalories').value = '';
+  document.getElementById('foodProtein').value = '';
+  document.getElementById('foodFat').value = '';
+  document.getElementById('foodCarbs').value = '';
+}
+function closeMealModal() { document.getElementById('mealModal').classList.remove('active'); }
+
+function selectMealType(el) {
+  document.querySelectorAll('#mealModal .meal-type-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedMealType = el.dataset.type;
+}
+
+async function saveMeal() {
+  const name = document.getElementById('foodName').value.trim();
+  const cal = parseFloat(document.getElementById('foodCalories').value) || 0;
+  if (!name) { toast('请输入食物名称'); return; }
+
+  try {
+    await api('POST', '/diet/records', {
+      record_date: today(),
+      meal_type: selectedMealType,
+      food_name: name,
+      calories: cal,
+      protein_g: parseFloat(document.getElementById('foodProtein').value) || 0,
+      fat_g: parseFloat(document.getElementById('foodFat').value) || 0,
+      carbs_g: parseFloat(document.getElementById('foodCarbs').value) || 0,
+    });
+    closeMealModal();
+    toast('记录已保存 ✓');
+    loadDashboard();
+  } catch (e) {
+    toast('保存失败: ' + e.message);
+  }
+}
+
+// ===== Exercise =====
+function openAddExercise() { document.getElementById('exerciseModal').classList.add('active'); }
+function closeExerciseModal() { document.getElementById('exerciseModal').classList.remove('active'); }
+
+async function saveExercise() {
+  const name = document.getElementById('exName').value.trim();
+  if (!name) { toast('请输入运动名称'); return; }
+  try {
+    await api('POST', '/exercise/records', {
+      record_date: today(),
+      exercise_type: 'cardio',
+      exercise_name: name,
+      duration_minutes: parseInt(document.getElementById('exDuration').value) || 30,
+      calories_burned: parseFloat(document.getElementById('exCalories').value) || 0,
+      sets: parseInt(document.getElementById('exSets').value) || 0,
+    });
+    closeExerciseModal();
+    toast('运动记录已保存 ✓');
+    loadExercises();
+    loadDashboard();
+  } catch (e) {
+    toast('保存失败: ' + e.message);
+  }
+}
+
+async function loadExercises() {
+  try {
+    const res = await api('GET', `/exercise/records?record_date=${today()}`);
+    const list = res.data || [];
+    const el = document.getElementById('exerciseList');
+    if (list.length === 0) {
+      el.innerHTML = '<div class="empty-state"><div class="icon">🏋️</div><div class="text">今天还没有运动记录<br>开始你的第一个训练吧！</div></div>';
+      return;
+    }
+    el.innerHTML = list.map(e => `
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-icon">${e.exercise_type === 'cardio' ? '🏃' : '🏋️'}</span>
+          <span class="exercise-name">${e.exercise_name}</span>
+        </div>
+        <div class="exercise-meta">
+          <span>⏱ <strong>${e.duration_minutes || 0}</strong> 分钟</span>
+          <span>🔥 <strong>${Math.round(e.calories_burned || 0)}</strong> kcal</span>
+          ${e.sets ? `<span>💪 <strong>${e.sets}</strong> 组</span>` : ''}
+        </div>
+      </div>
+    `).join('');
+  } catch (e) {
+    console.error('Exercise error:', e);
+  }
+}
+
+// ===== Sleep =====
+function setSleepQuality(val) {
+  sleepQualityVal = val;
+  const stars = document.querySelectorAll('#sleepStars .sleep-star');
+  stars.forEach((s, i) => s.textContent = i < val ? '⭐' : '☆');
+}
+
+async function recordSleep() {
+  const start = document.getElementById('sleepStart').value;
+  const end = document.getElementById('sleepEnd').value;
+  if (!start || !end) { toast('请选择时间'); return; }
+
+  const [sh, sm] = start.split(':').map(Number);
+  const [eh, em] = end.split(':').map(Number);
+  let mins = (eh * 60 + em) - (sh * 60 + sm);
+  if (mins < 0) mins += 24 * 60;
+
+  try {
+    await api('POST', '/sleep/records', {
+      record_date: today(),
+      sleep_start: `${today()}T${start}:00`,
+      sleep_end: `${today()}T${end}:00`,
+      duration_minutes: mins,
+      quality: sleepQualityVal,
+    });
+    toast('睡眠记录已保存 ✓');
+    loadDashboard();
+  } catch (e) {
+    toast('保存失败: ' + e.message);
+  }
+}
+
+// ===== Weight =====
+async function recordWeight() {
+  const w = parseFloat(document.getElementById('weightInput').value);
+  if (!w || w < 20 || w > 300) { toast('请输入合理体重'); return; }
+  try {
+    await api('POST', '/body-metrics', {
+      record_date: today(),
+      weight_kg: w,
+    });
+    document.getElementById('weightStatus').textContent = `已记录: ${w} kg`;
+    document.getElementById('weightInput').value = '';
+    toast('体重已记录 ✓');
+  } catch (e) {
+    toast('保存失败: ' + e.message);
+  }
+}
+
+// ===== Profile =====
+async function loadProfile() {
+  try {
+    const res = await api('GET', '/users/me');
+    const u = res.data;
+    currentUser = u;
+    document.getElementById('profileName').textContent = u.nickname || '未设置昵称';
+    document.getElementById('profilePhone').textContent = u.phone;
+    document.getElementById('pHeight').textContent = u.height_cm || '--';
+    document.getElementById('pWeight').textContent = u.current_weight_kg || '--';
+    const goals = { lose_weight: '减脂', build_muscle: '增肌', maintain: '保持', improve_health: '健康' };
+    document.getElementById('pGoal').textContent = goals[u.fitness_goal] || '--';
+    document.getElementById('pCalTarget').textContent = (u.daily_calorie_target || 2000) + ' kcal ›';
+  } catch (e) {
+    console.error('Profile error:', e);
+  }
+}
+
+function openEditProfile() {
+  document.getElementById('profileModal').classList.add('active');
+  if (currentUser) {
+    document.getElementById('editHeight').value = currentUser.height_cm || '';
+    document.getElementById('editWeight').value = currentUser.current_weight_kg || '';
+    document.getElementById('editTarget').value = currentUser.target_weight_kg || '';
+  }
+}
+function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
+
+function selectGoal(el) {
+  document.querySelectorAll('#profileModal .meal-type-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  selectedGoal = el.dataset.goal;
+}
+
+async function saveProfile() {
+  try {
+    await api('PUT', '/users/me', {
+      height_cm: parseFloat(document.getElementById('editHeight').value) || null,
+      current_weight_kg: parseFloat(document.getElementById('editWeight').value) || null,
+      target_weight_kg: parseFloat(document.getElementById('editTarget').value) || null,
+      fitness_goal: selectedGoal,
+    });
+    closeProfileModal();
+    toast('个人信息已更新 ✓');
+    loadProfile();
+  } catch (e) {
+    toast('保存失败: ' + e.message);
+  }
+}
+
+// ===== Init =====
+document.getElementById('tabBar').classList.add('hidden');
+if (token) {
+  // Try auto-login with saved token
+  api('GET', '/users/me').then(() => enterApp()).catch(() => {
+    token = ''; localStorage.removeItem('gs_token');
+  });
+}
+</script>
+</body>
+</html>
