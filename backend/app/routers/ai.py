@@ -2,7 +2,7 @@ import base64
 import time
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -101,6 +101,91 @@ async def recognize_exercise(
             user_id=current_user.id,
             recognition_type="exercise",
             image_url=request.image_url,
+            ai_provider=provider_name,
+            parsed_result=result.model_dump(),
+            processing_time_ms=processing_time,
+        )
+        db.add(log)
+        await db.flush()
+
+        return ApiResponse(
+            data=ExerciseRecognitionResponse(
+                recognition_id=str(log.id),
+                exercise=result.model_dump(),
+                ai_provider=provider_name,
+            )
+        )
+    except Exception as e:
+        raise AIServiceException(f"运动识别失败：{str(e)}")
+
+
+@router.post("/recognize/food/upload", response_model=ApiResponse[FoodRecognitionResponse])
+async def recognize_food_from_upload(
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    provider_name = ai_manager.get_provider_name(current_user.ai_provider)
+    provider = ai_manager.get_provider(current_user.ai_provider)
+
+    start_time = time.time()
+    try:
+        content = await file.read()
+        image_base64 = base64.b64encode(content).decode()
+
+        result = provider.analyze_food_image(image_base64)
+        if hasattr(result, "__await__"):
+            result = await result
+
+        processing_time = int((time.time() - start_time) * 1000)
+
+        log = AIRecognitionLog(
+            user_id=current_user.id,
+            recognition_type="food",
+            image_url=f"upload:{file.filename}",
+            ai_provider=provider_name,
+            parsed_result=result.model_dump(),
+            processing_time_ms=processing_time,
+        )
+        db.add(log)
+        await db.flush()
+
+        return ApiResponse(
+            data=FoodRecognitionResponse(
+                recognition_id=str(log.id),
+                foods=[f.model_dump() for f in result.foods],
+                total_calories=result.total_calories,
+                ai_provider=provider_name,
+            )
+        )
+    except Exception as e:
+        raise AIServiceException(f"食物识别失败：{str(e)}")
+
+
+@router.post("/recognize/exercise/upload", response_model=ApiResponse[ExerciseRecognitionResponse])
+async def recognize_exercise_from_upload(
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    provider_name = ai_manager.get_provider_name(current_user.ai_provider)
+    provider = ai_manager.get_provider(current_user.ai_provider)
+
+    start_time = time.time()
+    try:
+        content = await file.read()
+        image_base64 = base64.b64encode(content).decode()
+
+        result = provider.analyze_exercise_image(image_base64)
+        if hasattr(result, "__await__"):
+            result = await result
+
+        processing_time = int((time.time() - start_time) * 1000)
+
+        log = AIRecognitionLog(
+            user_id=current_user.id,
+            recognition_type="exercise",
+            image_url=f"upload:{file.filename}",
             ai_provider=provider_name,
             parsed_result=result.model_dump(),
             processing_time_ms=processing_time,

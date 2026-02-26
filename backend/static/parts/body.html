@@ -1,0 +1,474 @@
+<div class="phone-frame">
+  <!-- ===== Auth Page ===== -->
+  <div id="authPage" class="auth-page active">
+    <div class="auth-logo">&#127811;</div>
+    <div class="auth-title">GetStrong</div>
+    <div class="auth-subtitle">&#20320;&#30340;&#26234;&#33021;&#20581;&#24247;&#21161;&#25163;</div>
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <div class="auth-tab active" onclick="switchAuthTab('login')">&#30331;&#24405;</div>
+        <div class="auth-tab" onclick="switchAuthTab('register')">&#27880;&#20876;</div>
+      </div>
+      <div id="loginForm">
+        <div class="input-group">
+          <label>&#25163;&#26426;&#21495;</label>
+          <input type="tel" id="loginPhone" placeholder="&#35831;&#36755;&#20837;&#25163;&#26426;&#21495;" maxlength="11" value="13800138000">
+        </div>
+        <div class="input-group">
+          <label>&#23494;&#30721;</label>
+          <input type="password" id="loginPassword" placeholder="&#35831;&#36755;&#20837;&#23494;&#30721;" value="test123456">
+        </div>
+        <button class="btn btn-primary" onclick="doLogin()">&#30331;&#24405;</button>
+      </div>
+      <div id="registerForm" style="display:none;">
+        <div class="input-group">
+          <label>&#25163;&#26426;&#21495;</label>
+          <input type="tel" id="regPhone" placeholder="&#35831;&#36755;&#20837;&#25163;&#26426;&#21495;" maxlength="11">
+        </div>
+        <div class="input-group">
+          <label>&#26165;&#31216;</label>
+          <input type="text" id="regNickname" placeholder="&#32473;&#33258;&#24049;&#21462;&#20010;&#21517;&#23383;">
+        </div>
+        <div class="input-group">
+          <label>&#23494;&#30721;</label>
+          <input type="password" id="regPassword" placeholder="&#33267;&#23569;6&#20301;&#23494;&#30721;">
+        </div>
+        <button class="btn btn-primary" onclick="doRegister()">&#27880;&#20876;</button>
+      </div>
+      <div class="auth-error" id="authError"></div>
+    </div>
+  </div>
+
+  <!-- ===== Home Page ===== -->
+  <div id="homePage" class="page">
+    <div class="page-header">
+      <div class="date-nav">
+        <button class="date-nav-btn" onclick="changeDate(-1)">&#8249;</button>
+        <div style="text-align:center">
+          <div class="date-nav-text" id="dateText"></div>
+          <div class="date-nav-sub" id="dateSub"></div>
+        </div>
+        <button class="date-nav-btn" onclick="changeDate(1)">&#8250;</button>
+      </div>
+    </div>
+    <div class="page-body">
+      <!-- Daily Overview -->
+      <div class="overview-card">
+        <div class="overview-top">
+          <div class="cal-ring">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="34" fill="none" stroke="#F0EFEC" stroke-width="6"/>
+              <circle id="calArc" cx="40" cy="40" r="34" fill="none" stroke="var(--primary)" stroke-width="6" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+            </svg>
+            <div class="cal-ring-center">
+              <span class="cal-ring-num" id="calNum">0</span>
+              <span class="cal-ring-label">&#24050;&#25668;&#20837;</span>
+            </div>
+          </div>
+          <div class="cal-info">
+            <div class="cal-row"><span>&#30446;&#26631;</span><span class="v" id="calTarget">2000 kcal</span></div>
+            <div class="cal-row"><span>&#24050;&#25668;&#20837;</span><span class="v" id="calEaten">0 kcal</span></div>
+            <div class="cal-row"><span>&#21097;&#20313;</span><span class="v" id="calRemain">2000 kcal</span></div>
+          </div>
+        </div>
+        <div class="macro-bars">
+          <div class="macro-col">
+            <div class="nm">&#34507;&#30333;&#36136;</div>
+            <div class="bar"><div class="fill p" id="pBar" style="width:0%"></div></div>
+            <div class="vl" id="pVal">0g</div>
+          </div>
+          <div class="macro-col">
+            <div class="nm">&#33026;&#32938;</div>
+            <div class="bar"><div class="fill f" id="fBar" style="width:0%"></div></div>
+            <div class="vl" id="fVal">0g</div>
+          </div>
+          <div class="macro-col">
+            <div class="nm">&#30899;&#27700;</div>
+            <div class="bar"><div class="fill c" id="cBar" style="width:0%"></div></div>
+            <div class="vl" id="cVal">0g</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button class="qa-btn highlight" onclick="openRecognition()">
+          <span class="ico">&#128247;</span>
+          <span class="txt">&#25293;&#29031;&#35782;&#21035;</span>
+        </button>
+        <button class="qa-btn" onclick="openAddMeal()">
+          <span class="ico">&#127860;</span>
+          <span class="txt">&#39278;&#39135;&#35760;&#24405;</span>
+        </button>
+        <button class="qa-btn" onclick="openAddExercise()">
+          <span class="ico">&#127939;</span>
+          <span class="txt">&#36816;&#21160;&#35760;&#24405;</span>
+        </button>
+        <button class="qa-btn" onclick="openAddSleep()">
+          <span class="ico">&#128164;</span>
+          <span class="txt">&#30561;&#30496;&#35760;&#24405;</span>
+        </button>
+      </div>
+
+      <!-- Mini Stats -->
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <div class="ico">&#127939;&#8205;&#9794;&#65039;</div>
+          <div class="vl" id="exMin">0<span class="unit"> &#20998;&#38047;</span></div>
+          <div class="lb" id="exCal">&#28040;&#32791; 0 kcal</div>
+        </div>
+        <div class="mini-stat">
+          <div class="ico">&#128164;</div>
+          <div class="vl" id="slpH">--<span class="unit"> &#23567;&#26102;</span></div>
+          <div class="lb" id="slpQ">&#26242;&#26080;&#35760;&#24405;</div>
+        </div>
+        <div class="mini-stat">
+          <div class="ico">&#9878;&#65039;</div>
+          <div class="vl" id="wtVal">--<span class="unit"> kg</span></div>
+          <div class="lb">&#20307;&#37325;</div>
+        </div>
+      </div>
+
+      <!-- Today Meals -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">&#20170;&#26085;&#39278;&#39135;</div>
+          <div class="section-action" onclick="openAddMeal()">+ &#28155;&#21152;</div>
+        </div>
+        <div id="mealList">
+          <div class="empty"><div class="ico">&#127869;</div><div class="txt">&#36824;&#27809;&#26377;&#39278;&#39135;&#35760;&#24405;<br>&#28857;&#20987;&#25293;&#29031;&#35782;&#21035;&#25110; + &#28155;&#21152;</div></div>
+        </div>
+      </div>
+
+      <!-- Today Exercise -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">&#20170;&#26085;&#36816;&#21160;</div>
+          <div class="section-action" onclick="openAddExercise()">+ &#28155;&#21152;</div>
+        </div>
+        <div id="exList">
+          <div class="empty"><div class="ico">&#127947;</div><div class="txt">&#36824;&#27809;&#26377;&#36816;&#21160;&#35760;&#24405;</div></div>
+        </div>
+      </div>
+
+      <!-- Weight Record -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">&#20307;&#37325;&#35760;&#24405;</div>
+        </div>
+        <div style="background:var(--card);border-radius:var(--radius-sm);padding:12px;box-shadow:var(--shadow);">
+          <div class="weight-row">
+            <input type="number" id="weightInput" placeholder="&#36755;&#20837;&#20170;&#26085;&#20307;&#37325; (kg)" step="0.1" style="padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-xs);font-size:14px;">
+            <button class="btn btn-primary btn-sm" onclick="recordWeight()">&#35760;&#24405;</button>
+          </div>
+          <div style="font-size:12px;color:var(--text-secondary);" id="weightStatus">&#27599;&#26085;&#35760;&#24405;&#20307;&#37325;&#65292;&#36319;&#36394;&#21464;&#21270;&#36235;&#21183;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Chat Page ===== -->
+  <div id="chatPage" class="page">
+    <div class="page-header">
+      <div class="page-header-title">AI &#20581;&#24247;&#21161;&#25163;</div>
+    </div>
+    <div class="page-body">
+      <button class="chat-new-btn" onclick="createChatSession()">+ &#26032;&#24314;&#23545;&#35805;</button>
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">&#21382;&#21490;&#23545;&#35805;</div>
+        </div>
+        <div id="chatSessionList">
+          <div class="empty"><div class="ico">&#128172;</div><div class="txt">&#24320;&#22987;&#20320;&#30340;&#31532;&#19968;&#27425;&#23545;&#35805;<br>AI &#21161;&#25163;&#23558;&#20026;&#20320;&#25552;&#20379;&#20581;&#24247;&#24314;&#35758;</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Detail View (overlay) -->
+  <div id="chatView" class="chat-view">
+    <div class="chat-header">
+      <button class="chat-back" onclick="closeChatView()">&#8249;</button>
+      <div class="chat-header-title" id="chatViewTitle">&#26032;&#23545;&#35805;</div>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg assistant"><div class="msg-bubble">&#20320;&#22909;&#65281;&#25105;&#26159;&#20320;&#30340; AI &#20581;&#24247;&#21161;&#25163;&#12290;&#21487;&#20197;&#38382;&#25105;&#20851;&#20110;&#39278;&#39135;&#12289;&#36816;&#21160;&#12289;&#20581;&#24247;&#35745;&#21010;&#30340;&#20219;&#20309;&#38382;&#39064;&#65281;</div></div>
+    </div>
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="chatInput" placeholder="&#36755;&#20837;&#28040;&#24687;..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+      <button class="chat-send" id="chatSendBtn" onclick="sendChat()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== Stats Page ===== -->
+  <div id="statsPage" class="page">
+    <div class="page-header">
+      <div class="page-header-title">&#32479;&#35745;</div>
+    </div>
+    <div class="page-body">
+      <div class="stat-period">
+        <button class="stat-period-btn active" onclick="setStatPeriod(7, this)">&#36817;7&#22825;</button>
+        <button class="stat-period-btn" onclick="setStatPeriod(30, this)">&#36817;30&#22825;</button>
+      </div>
+
+      <!-- Calorie Trend -->
+      <div class="chart-card">
+        <div class="chart-title">&#21345;&#36335;&#37324;&#36235;&#21183;</div>
+        <svg id="calChart" class="chart-svg" height="120" viewBox="0 0 320 120"></svg>
+        <div class="chart-summary" id="calChartSummary"></div>
+      </div>
+
+      <!-- Weight Trend -->
+      <div class="chart-card">
+        <div class="chart-title">&#20307;&#37325;&#36235;&#21183;</div>
+        <svg id="wtChart" class="chart-svg" height="120" viewBox="0 0 320 120"></svg>
+        <div class="chart-summary" id="wtChartSummary"></div>
+      </div>
+
+      <!-- Active Plan -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">&#20581;&#36523;&#35745;&#21010;</div>
+        </div>
+        <div id="planArea">
+          <div style="text-align:center;padding:20px;">
+            <div style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;">&#36824;&#27809;&#26377;&#20581;&#36523;&#35745;&#21010;</div>
+            <button class="btn btn-primary btn-sm" style="width:auto;padding:10px 24px;" onclick="openGenPlan()">&#29983;&#25104; AI &#35745;&#21010;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Profile Page ===== -->
+  <div id="profilePage" class="page">
+    <div class="profile-top">
+      <div class="profile-avatar">&#127811;</div>
+      <div class="profile-name" id="profName">--</div>
+      <div class="profile-phone" id="profPhone">--</div>
+    </div>
+    <div class="profile-data">
+      <div class="profile-data-item">
+        <div class="v" id="profH">--</div>
+        <div class="l">&#36523;&#39640;(cm)</div>
+      </div>
+      <div class="profile-data-item">
+        <div class="v" id="profW">--</div>
+        <div class="l">&#20307;&#37325;(kg)</div>
+      </div>
+      <div class="profile-data-item">
+        <div class="v" id="profG">--</div>
+        <div class="l">&#30446;&#26631;</div>
+      </div>
+    </div>
+    <div class="profile-menu">
+      <div class="profile-menu-item" onclick="openEditProfile()">
+        <div class="profile-menu-left"><span class="ico">&#9878;&#65039;</span><span class="txt">&#32534;&#36753;&#36523;&#20307;&#25968;&#25454;</span></div>
+        <span class="profile-menu-right">&#8250;</span>
+      </div>
+      <div class="profile-menu-item" onclick="openCalTarget()">
+        <div class="profile-menu-left"><span class="ico">&#127919;</span><span class="txt">&#27599;&#26085;&#21345;&#36335;&#37324;&#30446;&#26631;</span></div>
+        <span class="profile-menu-right" id="profCal">2000 kcal &#8250;</span>
+      </div>
+      <div class="profile-menu-item" onclick="openAiPref()">
+        <div class="profile-menu-left"><span class="ico">&#129302;</span><span class="txt">AI &#26381;&#21153;&#20559;&#22909;</span></div>
+        <span class="profile-menu-right" id="profAi">Kimi &#8250;</span>
+      </div>
+    </div>
+    <div style="padding:20px;">
+      <button class="btn btn-danger-light" onclick="doLogout()">&#36864;&#20986;&#30331;&#24405;</button>
+    </div>
+  </div>
+
+  <!-- ===== Tab Bar ===== -->
+  <div class="tab-bar hidden" id="tabBar">
+    <button class="tab-item active" onclick="switchPage('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      <span>&#39318;&#39029;</span>
+    </button>
+    <button class="tab-item" onclick="switchPage('chat')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <span>&#23545;&#35805;</span>
+    </button>
+    <button class="tab-item" onclick="switchPage('stats')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="6" width="4" height="15" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg>
+      <span>&#32479;&#35745;</span>
+    </button>
+    <button class="tab-item" onclick="switchPage('profile')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>&#25105;&#30340;</span>
+    </button>
+  </div>
+
+  <!-- ===== Add Meal Modal ===== -->
+  <div class="modal-overlay" id="mealModal">
+    <div class="modal">
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#28155;&#21152;&#39278;&#39135;&#35760;&#24405;</div>
+      <div class="pill-row" id="mealTypePills">
+        <button class="pill active" data-type="breakfast" onclick="pickMealType(this)">&#127749; &#26089;&#39184;</button>
+        <button class="pill" data-type="lunch" onclick="pickMealType(this)">&#9728;&#65039; &#21320;&#39184;</button>
+        <button class="pill" data-type="dinner" onclick="pickMealType(this)">&#127769; &#26202;&#39184;</button>
+        <button class="pill" data-type="snack" onclick="pickMealType(this)">&#127850; &#21152;&#39184;</button>
+      </div>
+      <div class="input-group">
+        <label>&#39135;&#29289;&#21517;&#31216;</label>
+        <input type="text" id="mealFoodName" placeholder="&#20363;&#22914;&#65306;&#40481;&#33016;&#32905;&#27801;&#25289;">
+      </div>
+      <div class="input-group">
+        <label>&#28909;&#37327; (kcal)</label>
+        <input type="number" id="mealCal" placeholder="0">
+      </div>
+      <div class="nut-grid">
+        <div class="input-group"><label>&#34507;&#30333;&#36136;(g)</label><input type="number" id="mealP" placeholder="0" step="0.1"></div>
+        <div class="input-group"><label>&#33026;&#32938;(g)</label><input type="number" id="mealF" placeholder="0" step="0.1"></div>
+        <div class="input-group"><label>&#30899;&#27700;(g)</label><input type="number" id="mealC" placeholder="0" step="0.1"></div>
+      </div>
+      <button class="btn btn-primary mt-8" onclick="saveMeal()">&#20445;&#23384;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('mealModal')">&#21462;&#28040;</button>
+    </div>
+  </div>
+
+  <!-- ===== Add Exercise Modal ===== -->
+  <div class="modal-overlay" id="exerciseModal">
+    <div class="modal">
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#28155;&#21152;&#36816;&#21160;&#35760;&#24405;</div>
+      <div class="input-group">
+        <label>&#36816;&#21160;&#21517;&#31216;</label>
+        <input type="text" id="exName" placeholder="&#20363;&#22914;&#65306;&#36305;&#27493;&#12289;&#21147;&#37327;&#35757;&#32451;">
+      </div>
+      <div class="nut-grid">
+        <div class="input-group"><label>&#26102;&#38271;(&#20998;&#38047;)</label><input type="number" id="exDur" placeholder="30"></div>
+        <div class="input-group"><label>&#28040;&#32791;(kcal)</label><input type="number" id="exBurn" placeholder="200"></div>
+        <div class="input-group"><label>&#32452;&#25968;</label><input type="number" id="exSets" placeholder="0"></div>
+      </div>
+      <div class="pill-row mt-8">
+        <button class="pill active" data-int="medium" onclick="pickIntensity(this)">&#20013;&#31561;</button>
+        <button class="pill" data-int="low" onclick="pickIntensity(this)">&#20302;&#24378;</button>
+        <button class="pill" data-int="high" onclick="pickIntensity(this)">&#39640;&#24378;</button>
+      </div>
+      <button class="btn btn-primary mt-8" onclick="saveExercise()">&#20445;&#23384;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('exerciseModal')">&#21462;&#28040;</button>
+    </div>
+  </div>
+
+  <!-- ===== Add Sleep Modal ===== -->
+  <div class="modal-overlay" id="sleepModal">
+    <div class="modal">
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#35760;&#24405;&#30561;&#30496;</div>
+      <div style="display:flex;gap:10px;">
+        <div class="input-group" style="flex:1"><label>&#20837;&#30561;&#26102;&#38388;</label><input type="time" id="slpStart" value="23:00"></div>
+        <div class="input-group" style="flex:1"><label>&#36215;&#24202;&#26102;&#38388;</label><input type="time" id="slpEnd" value="07:00"></div>
+      </div>
+      <div class="input-group">
+        <label>&#30561;&#30496;&#36136;&#37327;</label>
+        <div style="display:flex;gap:6px;font-size:24px;cursor:pointer;" id="sleepStars">
+          <span onclick="setSlpQ(1)">&#11088;</span><span onclick="setSlpQ(2)">&#11088;</span><span onclick="setSlpQ(3)">&#11088;</span><span onclick="setSlpQ(4)">&#9734;</span><span onclick="setSlpQ(5)">&#9734;</span>
+        </div>
+      </div>
+      <button class="btn btn-primary mt-8" onclick="saveSleep()">&#20445;&#23384;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('sleepModal')">&#21462;&#28040;</button>
+    </div>
+  </div>
+
+  <!-- ===== Photo Recognition Modal ===== -->
+  <div class="modal-overlay" id="recogModal">
+    <div class="modal">
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#25293;&#29031;&#35782;&#21035;</div>
+      <div class="pill-row" style="justify-content:center;">
+        <button class="pill active" data-rtype="food" onclick="pickRecogType(this)">&#127860; &#39135;&#29289;</button>
+        <button class="pill" data-rtype="exercise" onclick="pickRecogType(this)">&#127939; &#36816;&#21160;</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;">
+        <button class="btn btn-primary" onclick="triggerCamera()" style="flex:1">&#128247; &#25293;&#29031;</button>
+        <button class="btn btn-outline" onclick="triggerGallery()" style="flex:1">&#128444;&#65039; &#30456;&#20876;</button>
+      </div>
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleImagePick(event)">
+      <input type="file" id="galleryInput" accept="image/*" style="display:none" onchange="handleImagePick(event)">
+      <div id="recogPreview" style="display:none;">
+        <div class="recog-preview">
+          <img id="recogImg" src="">
+          <div class="recog-loading" id="recogLoading" style="display:none;">
+            <div class="spinner"></div>
+            <div style="font-size:14px;color:var(--text-secondary);">AI &#27491;&#22312;&#20998;&#26512;...</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('recogModal')">&#21462;&#28040;</button>
+    </div>
+  </div>
+
+  <!-- ===== Recognition Result Modal ===== -->
+  <div class="modal-overlay" id="recogResultModal">
+    <div class="modal">
+      <div class="modal-bar"></div>
+      <div class="modal-title" id="recogResultTitle">&#35782;&#21035;&#32467;&#26524;</div>
+      <div id="recogResultContent"></div>
+      <div id="recogMealType" style="display:none;">
+        <div class="input-group"><label>&#39184;&#27425;</label></div>
+        <div class="pill-row" id="recogMealPills">
+          <button class="pill active" data-type="breakfast" onclick="pickRecogMealType(this)">&#26089;&#39184;</button>
+          <button class="pill" data-type="lunch" onclick="pickRecogMealType(this)">&#21320;&#39184;</button>
+          <button class="pill" data-type="dinner" onclick="pickRecogMealType(this)">&#26202;&#39184;</button>
+          <button class="pill" data-type="snack" onclick="pickRecogMealType(this)">&#21152;&#39184;</button>
+        </div>
+      </div>
+      <button class="btn btn-primary mt-8" id="recogSaveBtn" onclick="saveRecogResult()">&#30830;&#35748;&#20445;&#23384;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('recogResultModal')">&#21462;&#28040;</button>
+    </div>
+  </div>
+
+  <!-- ===== Edit Profile Modal ===== -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal">
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#32534;&#36753;&#36523;&#20307;&#25968;&#25454;</div>
+      <div class="nut-grid">
+        <div class="input-group"><label>&#36523;&#39640;(cm)</label><input type="number" id="editH" placeholder="175" step="0.1"></div>
+        <div class="input-group"><label>&#20307;&#37325;(kg)</label><input type="number" id="editW" placeholder="70" step="0.1"></div>
+        <div class="input-group"><label>&#30446;&#26631;(kg)</label><input type="number" id="editTW" placeholder="65" step="0.1"></div>
+      </div>
+      <div class="input-group">
+        <label>&#20581;&#36523;&#30446;&#26631;</label>
+        <div class="pill-row" id="goalPills">
+          <button class="pill active" data-goal="lose_weight" onclick="pickGoal(this)">&#20943;&#33026;</button>
+          <button class="pill" data-goal="build_muscle" onclick="pickGoal(this)">&#22686;&#32908;</button>
+          <button class="pill" data-goal="maintain" onclick="pickGoal(this)">&#20445;&#25345;</button>
+          <button class="pill" data-goal="improve_health" onclick="pickGoal(this)">&#20581;&#24247;</button>
+        </div>
+      </div>
+      <button class="btn btn-primary mt-8" onclick="saveProfile()">&#20445;&#23384;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('profileModal')">&#21462;&#28040;</button>
+    </div>
+  </div>
+
+  <!-- ===== Generate Plan Modal ===== -->
+  <div class="modal-overlay" id="planModal">
+    <div class="modal">
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#29983;&#25104; AI &#20581;&#36523;&#35745;&#21010;</div>
+      <div class="input-group">
+        <label>&#30446;&#26631;&#31867;&#22411;</label>
+        <div class="pill-row" id="planGoalPills">
+          <button class="pill active" data-goal="lose_weight" onclick="pickPlanGoal(this)">&#20943;&#33026;</button>
+          <button class="pill" data-goal="gain_muscle" onclick="pickPlanGoal(this)">&#22686;&#32908;</button>
+          <button class="pill" data-goal="maintain" onclick="pickPlanGoal(this)">&#20445;&#25345;</button>
+        </div>
+      </div>
+      <div class="input-group">
+        <label>&#35745;&#21010;&#21608;&#26399;(&#21608;)</label>
+        <input type="number" id="planWeeks" value="4" min="1" max="52">
+      </div>
+      <button class="btn btn-primary mt-8" id="genPlanBtn" onclick="generatePlan()">&#29983;&#25104;&#35745;&#21010;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('planModal')">&#21462;&#28040;</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+</div>

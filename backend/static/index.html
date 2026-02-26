@@ -3,31 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>GetStrong - 智能健康管理</title>
+<title>GetStrong - 智能健康助手</title>
 <style>
 /* ========== Reset & Variables ========== */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 :root {
-  --primary: #4F46E5;
-  --primary-light: #818CF8;
-  --primary-bg: #EEF2FF;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --danger: #EF4444;
-  --bg: #F8FAFC;
+  --primary: #2D6A4F;
+  --primary-light: #B7E4C7;
+  --primary-bg: #F0FAF4;
+  --accent: #D4956A;
+  --accent-bg: #FFF5ED;
+  --bg: #F8F7F4;
   --card: #FFFFFF;
-  --text: #1E293B;
-  --text-secondary: #64748B;
-  --border: #E2E8F0;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-  --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+  --text: #1C1C1E;
+  --text-secondary: #8E8E93;
+  --text-tertiary: #C7C7CC;
+  --border: #F0EFEC;
+  --shadow: 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
   --radius: 16px;
-  --radius-sm: 10px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
+  --success: #34C759;
+  --warning: #FF9500;
+  --danger: #FF3B30;
+  --blue: #5B8FA8;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
-  background: var(--bg);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Noto Sans SC", sans-serif;
+  background: #E8E6E1;
   color: var(--text);
   min-height: 100vh;
   display: flex;
@@ -37,11 +42,8 @@ body {
 
 /* ========== Phone Frame ========== */
 .phone-frame {
-  width: 390px;
-  min-height: 100vh;
-  background: var(--bg);
-  position: relative;
-  overflow-x: hidden;
+  width: 390px; min-height: 100vh; background: var(--bg);
+  position: relative; overflow-x: hidden;
 }
 
 /* ========== Pages ========== */
@@ -50,294 +52,395 @@ body {
 
 /* ========== Auth Page ========== */
 .auth-page {
-  display: none;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #A855F7 100%);
-  padding: 60px 24px 40px;
-  flex-direction: column;
-  align-items: center;
+  display: none; min-height: 100vh; padding: 80px 28px 40px;
+  flex-direction: column; align-items: center;
+  background: var(--bg);
 }
 .auth-page.active { display: flex; }
-
-.auth-logo {
-  width: 80px; height: 80px; background: rgba(255,255,255,0.2);
-  border-radius: 24px; display: flex; align-items: center; justify-content: center;
-  font-size: 36px; margin-bottom: 16px; backdrop-filter: blur(10px);
+.auth-logo { font-size: 48px; margin-bottom: 8px; }
+.auth-title { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+.auth-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 48px; }
+.auth-card { width: 100%; }
+.auth-tabs {
+  display: flex; gap: 0; margin-bottom: 32px; border-bottom: 1px solid var(--border);
 }
-.auth-title { color: #fff; font-size: 28px; font-weight: 700; margin-bottom: 6px; }
-.auth-subtitle { color: rgba(255,255,255,0.75); font-size: 15px; margin-bottom: 40px; }
-
-.auth-card {
-  width: 100%; background: #fff; border-radius: 24px; padding: 32px 24px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-}
-.auth-tabs { display: flex; margin-bottom: 24px; background: #F1F5F9; border-radius: 12px; padding: 4px; }
 .auth-tab {
-  flex: 1; padding: 10px; text-align: center; border-radius: 10px; font-size: 15px;
-  font-weight: 600; cursor: pointer; transition: all 0.2s; color: var(--text-secondary);
+  flex: 1; padding: 12px 0; text-align: center; font-size: 15px; font-weight: 600;
+  color: var(--text-tertiary); cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all 0.2s;
 }
-.auth-tab.active { background: #fff; color: var(--primary); box-shadow: var(--shadow); }
-
+.auth-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
 .input-group { margin-bottom: 16px; }
-.input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
-.input-group input {
-  width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: 12px;
-  font-size: 15px; outline: none; transition: border-color 0.2s;
+.input-group label {
+  display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary);
+  margin-bottom: 6px; letter-spacing: 0.3px;
 }
-.input-group input:focus { border-color: var(--primary); }
-
-.btn-primary {
-  width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none;
-  border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer;
-  transition: transform 0.1s, opacity 0.2s; margin-top: 8px;
+.input-group input, .input-group select, .input-group textarea {
+  width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 15px; outline: none; transition: border-color 0.2s; background: var(--card);
+  font-family: inherit;
 }
-.btn-primary:active { transform: scale(0.98); opacity: 0.9; }
-
+.input-group input:focus, .input-group select:focus { border-color: var(--primary); }
+.btn {
+  width: 100%; padding: 14px; border: none; border-radius: var(--radius-sm);
+  font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity 0.15s;
+  font-family: inherit;
+}
+.btn:active { opacity: 0.85; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-secondary { background: var(--border); color: var(--text); }
+.btn-accent { background: var(--accent); color: #fff; }
+.btn-outline { background: none; border: 1.5px solid var(--border); color: var(--text); }
+.btn-danger-light { background: #FFF0F0; color: var(--danger); }
+.btn-sm { padding: 10px 16px; font-size: 14px; width: auto; }
 .auth-error { color: var(--danger); font-size: 13px; margin-top: 12px; text-align: center; min-height: 18px; }
 
-/* ========== Header ========== */
-.header {
-  padding: 16px 20px 12px; background: var(--card);
+/* ========== Page Header ========== */
+.page-header {
+  padding: 12px 20px; background: var(--card);
   border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10;
 }
-.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-.header-greeting { font-size: 22px; font-weight: 700; }
-.header-date { font-size: 13px; color: var(--text-secondary); }
-.header-avatar {
-  width: 40px; height: 40px; background: var(--primary-bg); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer;
-}
+.page-header-title { font-size: 17px; font-weight: 600; text-align: center; }
 
-/* ========== Stats Cards ========== */
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px 20px; }
-.stat-card {
-  background: var(--card); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow);
+/* ========== Date Navigator ========== */
+.date-nav {
+  display: flex; align-items: center; justify-content: space-between;
 }
-.stat-card.wide { grid-column: span 2; }
-.stat-icon { font-size: 24px; margin-bottom: 8px; }
-.stat-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
-.stat-value { font-size: 24px; font-weight: 700; margin: 2px 0; }
-.stat-unit { font-size: 13px; color: var(--text-secondary); font-weight: 400; }
-.stat-sub { font-size: 12px; color: var(--text-secondary); }
-
-/* Calorie ring */
-.calorie-card { display: flex; align-items: center; gap: 20px; }
-.calorie-ring { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
-.calorie-ring svg { transform: rotate(-90deg); }
-.calorie-ring-text {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  text-align: center;
+.date-nav-btn {
+  width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  color: var(--text-secondary); font-size: 16px;
 }
-.calorie-ring-text .number { font-size: 20px; font-weight: 700; display: block; }
-.calorie-ring-text .label { font-size: 10px; color: var(--text-secondary); }
-.calorie-details { flex: 1; }
-.calorie-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
-.calorie-row .val { font-weight: 600; }
+.date-nav-text { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; }
+.date-nav-sub { font-size: 12px; color: var(--text-secondary); text-align: center; margin-top: 1px; }
 
-/* Macro bar */
-.macro-bar { display: flex; gap: 8px; margin-top: 10px; }
-.macro-item { flex: 1; text-align: center; }
-.macro-item .bar-bg { height: 6px; background: #E2E8F0; border-radius: 3px; overflow: hidden; margin: 6px 0; }
-.macro-item .bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-.macro-item .bar-fill.protein { background: #3B82F6; }
-.macro-item .bar-fill.fat { background: #F59E0B; }
-.macro-item .bar-fill.carbs { background: #10B981; }
-.macro-item .name { font-size: 11px; color: var(--text-secondary); }
-.macro-item .val { font-size: 13px; font-weight: 600; }
+/* ========== Content Area ========== */
+.page-body { padding: 16px 20px; }
+
+/* ========== Daily Overview Card ========== */
+.overview-card {
+  background: var(--card); border-radius: var(--radius); padding: 20px;
+  box-shadow: var(--shadow); margin-bottom: 16px;
+}
+.overview-top { display: flex; align-items: center; gap: 20px; margin-bottom: 16px; }
+.cal-ring { position: relative; width: 80px; height: 80px; flex-shrink: 0; }
+.cal-ring svg { transform: rotate(-90deg); }
+.cal-ring-center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;
+}
+.cal-ring-num { font-size: 18px; font-weight: 700; display: block; line-height: 1.1; }
+.cal-ring-label { font-size: 10px; color: var(--text-secondary); }
+.cal-info { flex: 1; }
+.cal-row { display: flex; justify-content: space-between; padding: 3px 0; font-size: 13px; color: var(--text-secondary); }
+.cal-row .v { font-weight: 600; color: var(--text); }
+.macro-bars { display: flex; gap: 12px; }
+.macro-col { flex: 1; text-align: center; }
+.macro-col .nm { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+.macro-col .bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.macro-col .fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+.macro-col .fill.p { background: var(--blue); }
+.macro-col .fill.f { background: var(--warning); }
+.macro-col .fill.c { background: var(--success); }
+.macro-col .vl { font-size: 12px; font-weight: 600; margin-top: 3px; }
+
+/* ========== Quick Actions ========== */
+.quick-actions { display: flex; gap: 10px; margin-bottom: 20px; }
+.qa-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 14px 8px; background: var(--card); border-radius: var(--radius);
+  box-shadow: var(--shadow); border: none; cursor: pointer; transition: transform 0.1s;
+  font-family: inherit;
+}
+.qa-btn:active { transform: scale(0.97); }
+.qa-btn .ico { font-size: 24px; }
+.qa-btn .txt { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+.qa-btn.highlight {
+  background: var(--primary); color: #fff;
+}
+.qa-btn.highlight .txt { color: rgba(255,255,255,0.9); }
+
+/* ========== Mini Stats Row ========== */
+.mini-stats { display: flex; gap: 10px; margin-bottom: 20px; }
+.mini-stat {
+  flex: 1; background: var(--card); border-radius: var(--radius-sm); padding: 12px;
+  box-shadow: var(--shadow); text-align: center; cursor: pointer;
+}
+.mini-stat .ico { font-size: 20px; margin-bottom: 4px; }
+.mini-stat .vl { font-size: 16px; font-weight: 700; }
+.mini-stat .unit { font-size: 11px; color: var(--text-secondary); font-weight: 400; }
+.mini-stat .lb { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
 
 /* ========== Section ========== */
-.section { padding: 0 20px 16px; }
-.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.section-title { font-size: 17px; font-weight: 700; }
-.section-action { font-size: 13px; color: var(--primary); font-weight: 600; cursor: pointer; }
+.section { margin-bottom: 20px; }
+.section-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.section-title { font-size: 16px; font-weight: 600; }
+.section-action { font-size: 13px; color: var(--primary); font-weight: 500; cursor: pointer; }
 
-/* ========== Meal cards ========== */
-.meal-card {
-  background: var(--card); border-radius: var(--radius); padding: 14px 16px;
-  box-shadow: var(--shadow); margin-bottom: 10px;
+/* ========== Record Cards ========== */
+.record-card {
+  background: var(--card); border-radius: var(--radius-sm); padding: 12px 14px;
+  box-shadow: var(--shadow); margin-bottom: 8px;
   display: flex; justify-content: space-between; align-items: center;
 }
-.meal-left { display: flex; align-items: center; gap: 12px; }
-.meal-emoji { font-size: 28px; }
-.meal-name { font-size: 15px; font-weight: 600; }
-.meal-food { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-.meal-cal { font-size: 15px; font-weight: 700; color: var(--primary); }
-.meal-cal span { font-size: 11px; font-weight: 400; color: var(--text-secondary); }
+.record-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.record-ico { font-size: 20px; flex-shrink: 0; }
+.record-info { min-width: 0; }
+.record-name { font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.record-meta { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+.record-val { font-size: 14px; font-weight: 600; color: var(--primary); white-space: nowrap; margin-left: 8px; }
+.record-val .u { font-size: 11px; font-weight: 400; color: var(--text-secondary); }
+
+/* ========== Empty State ========== */
+.empty { text-align: center; padding: 32px 20px; color: var(--text-tertiary); }
+.empty .ico { font-size: 36px; margin-bottom: 8px; opacity: 0.5; }
+.empty .txt { font-size: 13px; line-height: 1.5; }
 
 /* ========== Tab Bar ========== */
 .tab-bar {
   position: fixed; bottom: 0; width: 390px; background: var(--card);
-  border-top: 1px solid var(--border); display: flex; padding: 8px 0 20px; z-index: 20;
+  border-top: 1px solid var(--border); display: flex; padding: 6px 0 22px; z-index: 20;
 }
 .tab-bar.hidden { display: none; }
 .tab-item {
   flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
-  cursor: pointer; font-size: 11px; color: var(--text-secondary); transition: color 0.2s;
-  background: none; border: none; -webkit-tap-highlight-color: transparent;
+  cursor: pointer; font-size: 10px; color: var(--text-tertiary); transition: color 0.2s;
+  background: none; border: none; font-family: inherit;
 }
 .tab-item.active { color: var(--primary); }
 .tab-item svg { width: 24px; height: 24px; }
 
-/* ========== Add Fab ========== */
-.fab {
-  width: 52px; height: 52px; background: var(--primary); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; margin-top: -20px;
-  box-shadow: 0 4px 14px rgba(79,70,229,0.4); border: none; cursor: pointer;
-}
-.fab svg { width: 28px; height: 28px; color: #fff; }
-
 /* ========== Modal ========== */
 .modal-overlay {
   display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4); z-index: 100; justify-content: center; align-items: flex-end;
+  background: rgba(0,0,0,0.35); z-index: 100; justify-content: center; align-items: flex-end;
 }
 .modal-overlay.active { display: flex; }
 .modal {
-  background: var(--card); border-radius: 24px 24px 0 0; width: 390px;
-  max-height: 85vh; overflow-y: auto; padding: 24px;
-  animation: slideUp 0.3s ease;
+  background: var(--card); border-radius: 20px 20px 0 0; width: 390px;
+  max-height: 90vh; overflow-y: auto; padding: 24px 20px 32px;
+  animation: slideUp 0.25s ease;
+}
+.modal-full {
+  background: var(--bg); border-radius: 0; width: 390px; height: 100vh;
+  overflow-y: auto; padding: 0; animation: slideUp 0.25s ease;
 }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.modal-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; text-align: center; }
-.modal .input-group { margin-bottom: 14px; }
+.modal-bar { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
+.modal-title { font-size: 17px; font-weight: 600; margin-bottom: 20px; text-align: center; }
 
-.meal-type-select { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
-.meal-type-btn {
-  padding: 10px 0; border: 2px solid var(--border); border-radius: 12px; background: none;
-  font-size: 13px; cursor: pointer; text-align: center; transition: all 0.2s;
+/* ========== Meal Type Pills ========== */
+.pill-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.pill {
+  padding: 8px 14px; border: 1.5px solid var(--border); border-radius: 20px;
+  font-size: 13px; cursor: pointer; background: none; transition: all 0.15s;
+  font-family: inherit;
 }
-.meal-type-btn.active { border-color: var(--primary); background: var(--primary-bg); color: var(--primary); font-weight: 600; }
+.pill.active { border-color: var(--primary); background: var(--primary-bg); color: var(--primary); font-weight: 500; }
 
-.nutrient-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+/* ========== Nutrient Grid ========== */
+.nut-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 
-/* ========== Exercise Page ========== */
-.exercise-card {
+/* ========== Recognition ========== */
+.recog-preview {
+  width: 100%; aspect-ratio: 4/3; border-radius: var(--radius); overflow: hidden;
+  background: var(--bg); display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px; position: relative;
+}
+.recog-preview img { width: 100%; height: 100%; object-fit: cover; }
+.recog-loading {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.85); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px;
+}
+.spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--primary);
+  border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.recog-foods { margin-bottom: 16px; }
+.recog-food {
+  background: var(--bg); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 8px;
+}
+.recog-food-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.recog-food-name { font-size: 15px; font-weight: 600; }
+.recog-food-conf { font-size: 12px; color: var(--text-secondary); }
+.recog-food-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; }
+.recog-food-grid .fg { text-align: center; }
+.recog-food-grid .fg label { font-size: 10px; color: var(--text-secondary); display: block; margin-bottom: 2px; }
+.recog-food-grid .fg input {
+  width: 100%; text-align: center; padding: 6px 4px; border: 1px solid var(--border);
+  border-radius: 6px; font-size: 13px; font-weight: 500; background: var(--card);
+}
+
+/* ========== Chat ========== */
+.chat-list-item {
+  background: var(--card); border-radius: var(--radius-sm); padding: 14px;
+  box-shadow: var(--shadow); margin-bottom: 8px; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.chat-list-title { font-size: 15px; font-weight: 500; }
+.chat-list-time { font-size: 12px; color: var(--text-tertiary); }
+.chat-new-btn {
+  width: 100%; padding: 14px; background: var(--primary-bg); border: 1.5px dashed var(--primary);
+  border-radius: var(--radius-sm); font-size: 14px; color: var(--primary); font-weight: 500;
+  cursor: pointer; margin-bottom: 16px; font-family: inherit;
+}
+
+.chat-view { display: none; position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+  width: 390px; height: 100vh; background: var(--bg); z-index: 30; flex-direction: column; }
+.chat-view.active { display: flex; }
+.chat-header {
+  padding: 12px 16px; background: var(--card); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+}
+.chat-back { background: none; border: none; font-size: 20px; cursor: pointer; padding: 4px; color: var(--text); }
+.chat-header-title { font-size: 16px; font-weight: 600; flex: 1; }
+.chat-messages { flex: 1; overflow-y: auto; padding: 16px; }
+.msg { margin-bottom: 12px; display: flex; }
+.msg.user { justify-content: flex-end; }
+.msg-bubble {
+  max-width: 80%; padding: 10px 14px; border-radius: 16px; font-size: 14px;
+  line-height: 1.5; word-break: break-word; white-space: pre-wrap;
+}
+.msg.user .msg-bubble { background: var(--primary); color: #fff; border-bottom-right-radius: 4px; }
+.msg.assistant .msg-bubble { background: var(--card); box-shadow: var(--shadow); border-bottom-left-radius: 4px; }
+.chat-input-area {
+  padding: 12px 16px 28px; background: var(--card); border-top: 1px solid var(--border);
+  display: flex; gap: 10px; align-items: flex-end;
+}
+.chat-input {
+  flex: 1; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 20px;
+  font-size: 14px; outline: none; resize: none; max-height: 100px; min-height: 40px;
+  font-family: inherit; line-height: 1.4;
+}
+.chat-input:focus { border-color: var(--primary); }
+.chat-send {
+  width: 40px; height: 40px; border-radius: 50%; background: var(--primary); border: none;
+  color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.chat-send:disabled { opacity: 0.4; }
+.chat-send svg { width: 20px; height: 20px; }
+
+/* ========== Stats ========== */
+.stat-period { display: flex; gap: 0; margin-bottom: 16px; background: var(--border); border-radius: 8px; padding: 3px; }
+.stat-period-btn {
+  flex: 1; padding: 8px; text-align: center; border-radius: 6px; font-size: 13px;
+  font-weight: 500; cursor: pointer; background: none; border: none; color: var(--text-secondary);
+  font-family: inherit; transition: all 0.15s;
+}
+.stat-period-btn.active { background: var(--card); color: var(--text); box-shadow: var(--shadow); }
+
+.chart-card {
   background: var(--card); border-radius: var(--radius); padding: 16px;
-  box-shadow: var(--shadow); margin-bottom: 10px;
+  box-shadow: var(--shadow); margin-bottom: 16px;
 }
-.exercise-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.exercise-icon { font-size: 24px; }
-.exercise-name { font-size: 15px; font-weight: 600; }
-.exercise-meta { display: flex; gap: 16px; }
-.exercise-meta span { font-size: 13px; color: var(--text-secondary); }
-.exercise-meta strong { color: var(--text); }
+.chart-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+.chart-svg { width: 100%; }
+.chart-summary { display: flex; gap: 16px; margin-top: 10px; }
+.chart-summary-item { font-size: 12px; color: var(--text-secondary); }
+.chart-summary-item strong { color: var(--text); font-weight: 600; }
 
-/* ========== Profile Page ========== */
-.profile-header {
-  text-align: center; padding: 40px 20px 20px;
-  background: linear-gradient(135deg, #4F46E5, #7C3AED); color: #fff;
+/* Plan card */
+.plan-card {
+  background: linear-gradient(135deg, var(--primary) 0%, #40916C 100%);
+  border-radius: var(--radius); padding: 20px; color: #fff; margin-bottom: 16px;
 }
+.plan-card .ttl { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+.plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.plan-item { background: rgba(255,255,255,0.15); border-radius: var(--radius-xs); padding: 10px; text-align: center; }
+.plan-item .v { font-size: 18px; font-weight: 700; }
+.plan-item .l { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+
+/* ========== Profile ========== */
+.profile-top { text-align: center; padding: 32px 20px 20px; }
 .profile-avatar {
-  width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,0.2);
-  display: flex; align-items: center; justify-content: center; font-size: 32px;
-  margin: 0 auto 12px; border: 3px solid rgba(255,255,255,0.3);
+  width: 64px; height: 64px; border-radius: 50%; background: var(--primary-bg);
+  display: flex; align-items: center; justify-content: center; font-size: 28px;
+  margin: 0 auto 10px; border: 2px solid var(--primary-light);
 }
 .profile-name { font-size: 20px; font-weight: 700; }
-.profile-phone { font-size: 13px; opacity: 0.7; margin-top: 4px; }
+.profile-phone { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
 
-.profile-stats {
+.profile-data {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border);
-  margin: 0 20px; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
-  transform: translateY(-20px);
+  margin: 0 20px 20px; border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow);
 }
-.profile-stat {
-  background: var(--card); padding: 16px 8px; text-align: center;
-}
-.profile-stat .val { font-size: 20px; font-weight: 700; color: var(--primary); }
-.profile-stat .label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+.profile-data-item { background: var(--card); padding: 14px 8px; text-align: center; }
+.profile-data-item .v { font-size: 18px; font-weight: 700; color: var(--primary); }
+.profile-data-item .l { font-size: 11px; color: var(--text-secondary); margin-top: 3px; }
 
-.profile-section { padding: 0 20px; margin-bottom: 16px; }
-.profile-item {
+.profile-menu { padding: 0 20px; }
+.profile-menu-item {
   display: flex; justify-content: space-between; align-items: center;
   padding: 14px 16px; background: var(--card); border-radius: var(--radius-sm);
   margin-bottom: 8px; box-shadow: var(--shadow); cursor: pointer;
 }
-.profile-item .left { display: flex; align-items: center; gap: 12px; }
-.profile-item .icon { font-size: 20px; }
-.profile-item .text { font-size: 15px; }
-.profile-item .arrow { color: var(--text-secondary); font-size: 18px; }
-
-.btn-logout {
-  width: calc(100% - 40px); margin: 20px; padding: 14px; background: #FEF2F2;
-  color: var(--danger); border: none; border-radius: 14px; font-size: 15px;
-  font-weight: 600; cursor: pointer;
-}
-
-/* ========== Sleep Page ========== */
-.sleep-card {
-  background: var(--card); border-radius: var(--radius); padding: 20px;
-  box-shadow: var(--shadow); margin-bottom: 12px; text-align: center;
-}
-.sleep-duration { font-size: 48px; font-weight: 700; color: var(--primary); }
-.sleep-duration span { font-size: 16px; color: var(--text-secondary); font-weight: 400; }
-.sleep-quality { display: flex; justify-content: center; gap: 4px; margin-top: 8px; }
-.sleep-star { font-size: 24px; cursor: pointer; }
-
-/* ========== Empty State ========== */
-.empty-state {
-  text-align: center; padding: 40px 20px; color: var(--text-secondary);
-}
-.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
-.empty-state .text { font-size: 14px; }
+.profile-menu-left { display: flex; align-items: center; gap: 12px; }
+.profile-menu-left .ico { font-size: 18px; }
+.profile-menu-left .txt { font-size: 15px; }
+.profile-menu-right { font-size: 13px; color: var(--text-tertiary); }
 
 /* ========== Toast ========== */
 .toast {
   position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
-  background: #1E293B; color: #fff; padding: 12px 24px; border-radius: 12px;
-  font-size: 14px; z-index: 200; opacity: 0; transition: opacity 0.3s;
-  pointer-events: none;
+  background: var(--text); color: #fff; padding: 10px 20px; border-radius: 20px;
+  font-size: 13px; z-index: 200; opacity: 0; transition: opacity 0.3s;
+  pointer-events: none; max-width: 300px; text-align: center;
 }
 .toast.show { opacity: 1; }
 
-/* ========== Body Metric ========== */
-.metric-input-row {
-  display: flex; gap: 10px; margin-bottom: 12px;
+/* ========== Weight Input ========== */
+.weight-row {
+  display: flex; gap: 8px; margin-bottom: 12px;
 }
-.metric-input-row input { flex: 1; }
-.metric-input-row .btn-sm {
-  padding: 12px 20px; background: var(--primary); color: #fff; border: none;
-  border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;
-}
+.weight-row input { flex: 1; }
+.weight-row .btn { width: auto; padding: 12px 18px; }
+
+/* ========== Utility ========== */
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mb-8 { margin-bottom: 8px; }
+.gap-8 { gap: 8px; }
+.hidden { display: none !important; }
+
 </style>
 </head>
 <body>
-
 <div class="phone-frame">
   <!-- ===== Auth Page ===== -->
   <div id="authPage" class="auth-page active">
-    <div class="auth-logo">💪</div>
+    <div class="auth-logo">&#127811;</div>
     <div class="auth-title">GetStrong</div>
-    <div class="auth-subtitle">你的智能健康管理伙伴</div>
+    <div class="auth-subtitle">&#20320;&#30340;&#26234;&#33021;&#20581;&#24247;&#21161;&#25163;</div>
     <div class="auth-card">
       <div class="auth-tabs">
-        <div class="auth-tab active" onclick="switchAuthTab('login')">登录</div>
-        <div class="auth-tab" onclick="switchAuthTab('register')">注册</div>
+        <div class="auth-tab active" onclick="switchAuthTab('login')">&#30331;&#24405;</div>
+        <div class="auth-tab" onclick="switchAuthTab('register')">&#27880;&#20876;</div>
       </div>
       <div id="loginForm">
         <div class="input-group">
-          <label>手机号</label>
-          <input type="tel" id="loginPhone" placeholder="请输入手机号" maxlength="11" value="13800138000">
+          <label>&#25163;&#26426;&#21495;</label>
+          <input type="tel" id="loginPhone" placeholder="&#35831;&#36755;&#20837;&#25163;&#26426;&#21495;" maxlength="11" value="13800138000">
         </div>
         <div class="input-group">
-          <label>密码</label>
-          <input type="password" id="loginPassword" placeholder="请输入密码" value="test123456">
+          <label>&#23494;&#30721;</label>
+          <input type="password" id="loginPassword" placeholder="&#35831;&#36755;&#20837;&#23494;&#30721;" value="test123456">
         </div>
-        <button class="btn-primary" onclick="doLogin()">登录</button>
+        <button class="btn btn-primary" onclick="doLogin()">&#30331;&#24405;</button>
       </div>
       <div id="registerForm" style="display:none;">
         <div class="input-group">
-          <label>手机号</label>
-          <input type="tel" id="regPhone" placeholder="请输入手机号" maxlength="11">
+          <label>&#25163;&#26426;&#21495;</label>
+          <input type="tel" id="regPhone" placeholder="&#35831;&#36755;&#20837;&#25163;&#26426;&#21495;" maxlength="11">
         </div>
         <div class="input-group">
-          <label>昵称</label>
-          <input type="text" id="regNickname" placeholder="给自己取个名字">
+          <label>&#26165;&#31216;</label>
+          <input type="text" id="regNickname" placeholder="&#32473;&#33258;&#24049;&#21462;&#20010;&#21517;&#23383;">
         </div>
         <div class="input-group">
-          <label>密码</label>
-          <input type="password" id="regPassword" placeholder="至少6位密码">
+          <label>&#23494;&#30721;</label>
+          <input type="password" id="regPassword" placeholder="&#33267;&#23569;6&#20301;&#23494;&#30721;">
         </div>
-        <button class="btn-primary" onclick="doRegister()">注册</button>
+        <button class="btn btn-primary" onclick="doRegister()">&#27880;&#20876;</button>
       </div>
       <div class="auth-error" id="authError"></div>
     </div>
@@ -345,301 +448,431 @@ body {
 
   <!-- ===== Home Page ===== -->
   <div id="homePage" class="page">
-    <div class="header">
-      <div class="header-top">
-        <div>
-          <div class="header-greeting" id="greeting">早上好，</div>
-          <div class="header-date" id="todayDate"></div>
+    <div class="page-header">
+      <div class="date-nav">
+        <button class="date-nav-btn" onclick="changeDate(-1)">&#8249;</button>
+        <div style="text-align:center">
+          <div class="date-nav-text" id="dateText"></div>
+          <div class="date-nav-sub" id="dateSub"></div>
         </div>
-        <div class="header-avatar" onclick="switchPage('profile')">👤</div>
+        <button class="date-nav-btn" onclick="changeDate(1)">&#8250;</button>
       </div>
     </div>
-
-    <!-- Calorie overview -->
-    <div class="stats-grid">
-      <div class="stat-card wide">
-        <div class="calorie-card">
-          <div class="calorie-ring">
-            <svg width="90" height="90" viewBox="0 0 90 90">
-              <circle cx="45" cy="45" r="38" fill="none" stroke="#E2E8F0" stroke-width="8"/>
-              <circle id="calorieArc" cx="45" cy="45" r="38" fill="none" stroke="var(--primary)" stroke-width="8" stroke-linecap="round" stroke-dasharray="239" stroke-dashoffset="239"/>
+    <div class="page-body">
+      <!-- Daily Overview -->
+      <div class="overview-card">
+        <div class="overview-top">
+          <div class="cal-ring">
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <circle cx="40" cy="40" r="34" fill="none" stroke="#F0EFEC" stroke-width="6"/>
+              <circle id="calArc" cx="40" cy="40" r="34" fill="none" stroke="var(--primary)" stroke-width="6" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
             </svg>
-            <div class="calorie-ring-text">
-              <span class="number" id="calConsumed">0</span>
-              <span class="label">已摄入</span>
+            <div class="cal-ring-center">
+              <span class="cal-ring-num" id="calNum">0</span>
+              <span class="cal-ring-label">&#24050;&#25668;&#20837;</span>
             </div>
           </div>
-          <div class="calorie-details">
-            <div class="calorie-row"><span>目标</span><span class="val" id="calTarget">2000 kcal</span></div>
-            <div class="calorie-row"><span>已摄入</span><span class="val" id="calEaten">0 kcal</span></div>
-            <div class="calorie-row"><span>剩余</span><span class="val" id="calRemain">2000 kcal</span></div>
-            <div class="macro-bar">
-              <div class="macro-item">
-                <div class="name">蛋白质</div>
-                <div class="bar-bg"><div class="bar-fill protein" id="proteinBar" style="width:0%"></div></div>
-                <div class="val" id="proteinVal">0g</div>
-              </div>
-              <div class="macro-item">
-                <div class="name">脂肪</div>
-                <div class="bar-bg"><div class="bar-fill fat" id="fatBar" style="width:0%"></div></div>
-                <div class="val" id="fatVal">0g</div>
-              </div>
-              <div class="macro-item">
-                <div class="name">碳水</div>
-                <div class="bar-bg"><div class="bar-fill carbs" id="carbsBar" style="width:0%"></div></div>
-                <div class="val" id="carbsVal">0g</div>
-              </div>
-            </div>
+          <div class="cal-info">
+            <div class="cal-row"><span>&#30446;&#26631;</span><span class="v" id="calTarget">2000 kcal</span></div>
+            <div class="cal-row"><span>&#24050;&#25668;&#20837;</span><span class="v" id="calEaten">0 kcal</span></div>
+            <div class="cal-row"><span>&#21097;&#20313;</span><span class="v" id="calRemain">2000 kcal</span></div>
+          </div>
+        </div>
+        <div class="macro-bars">
+          <div class="macro-col">
+            <div class="nm">&#34507;&#30333;&#36136;</div>
+            <div class="bar"><div class="fill p" id="pBar" style="width:0%"></div></div>
+            <div class="vl" id="pVal">0g</div>
+          </div>
+          <div class="macro-col">
+            <div class="nm">&#33026;&#32938;</div>
+            <div class="bar"><div class="fill f" id="fBar" style="width:0%"></div></div>
+            <div class="vl" id="fVal">0g</div>
+          </div>
+          <div class="macro-col">
+            <div class="nm">&#30899;&#27700;</div>
+            <div class="bar"><div class="fill c" id="cBar" style="width:0%"></div></div>
+            <div class="vl" id="cVal">0g</div>
           </div>
         </div>
       </div>
 
-      <div class="stat-card" onclick="switchPage('exercise')">
-        <div class="stat-icon">🏃</div>
-        <div class="stat-label">今日运动</div>
-        <div class="stat-value" id="exerciseMin">0<span class="stat-unit"> 分钟</span></div>
-        <div class="stat-sub" id="exerciseCal">消耗 0 kcal</div>
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button class="qa-btn highlight" onclick="openRecognition()">
+          <span class="ico">&#128247;</span>
+          <span class="txt">&#25293;&#29031;&#35782;&#21035;</span>
+        </button>
+        <button class="qa-btn" onclick="openAddMeal()">
+          <span class="ico">&#127860;</span>
+          <span class="txt">&#39278;&#39135;&#35760;&#24405;</span>
+        </button>
+        <button class="qa-btn" onclick="openAddExercise()">
+          <span class="ico">&#127939;</span>
+          <span class="txt">&#36816;&#21160;&#35760;&#24405;</span>
+        </button>
+        <button class="qa-btn" onclick="openAddSleep()">
+          <span class="ico">&#128164;</span>
+          <span class="txt">&#30561;&#30496;&#35760;&#24405;</span>
+        </button>
       </div>
-      <div class="stat-card" onclick="switchPage('sleep')">
-        <div class="stat-icon">😴</div>
-        <div class="stat-label">昨晚睡眠</div>
-        <div class="stat-value" id="sleepHours">--<span class="stat-unit"> 小时</span></div>
-        <div class="stat-sub" id="sleepQuality">暂无记录</div>
-      </div>
-    </div>
 
-    <!-- Today meals -->
-    <div class="section">
-      <div class="section-header">
-        <div class="section-title">今日饮食</div>
-        <div class="section-action" onclick="openAddMeal()">+ 添加</div>
-      </div>
-      <div id="mealList">
-        <div class="empty-state"><div class="icon">🍽️</div><div class="text">今天还没有饮食记录<br>点击 + 开始记录</div></div>
-      </div>
-    </div>
-
-    <!-- Body metric -->
-    <div class="section">
-      <div class="section-header">
-        <div class="section-title">体重记录</div>
-      </div>
-      <div class="stat-card">
-        <div class="metric-input-row">
-          <input type="number" id="weightInput" placeholder="输入今日体重 (kg)" step="0.1">
-          <button class="btn-sm" onclick="recordWeight()">记录</button>
+      <!-- Mini Stats -->
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <div class="ico">&#127939;&#8205;&#9794;&#65039;</div>
+          <div class="vl" id="exMin">0<span class="unit"> &#20998;&#38047;</span></div>
+          <div class="lb" id="exCal">&#28040;&#32791; 0 kcal</div>
         </div>
-        <div class="stat-sub" id="weightStatus">记录每日体重，跟踪变化趋势</div>
+        <div class="mini-stat">
+          <div class="ico">&#128164;</div>
+          <div class="vl" id="slpH">--<span class="unit"> &#23567;&#26102;</span></div>
+          <div class="lb" id="slpQ">&#26242;&#26080;&#35760;&#24405;</div>
+        </div>
+        <div class="mini-stat">
+          <div class="ico">&#9878;&#65039;</div>
+          <div class="vl" id="wtVal">--<span class="unit"> kg</span></div>
+          <div class="lb">&#20307;&#37325;</div>
+        </div>
+      </div>
+
+      <!-- Today Meals -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">&#20170;&#26085;&#39278;&#39135;</div>
+          <div class="section-action" onclick="openAddMeal()">+ &#28155;&#21152;</div>
+        </div>
+        <div id="mealList">
+          <div class="empty"><div class="ico">&#127869;</div><div class="txt">&#36824;&#27809;&#26377;&#39278;&#39135;&#35760;&#24405;<br>&#28857;&#20987;&#25293;&#29031;&#35782;&#21035;&#25110; + &#28155;&#21152;</div></div>
+        </div>
+      </div>
+
+      <!-- Today Exercise -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">&#20170;&#26085;&#36816;&#21160;</div>
+          <div class="section-action" onclick="openAddExercise()">+ &#28155;&#21152;</div>
+        </div>
+        <div id="exList">
+          <div class="empty"><div class="ico">&#127947;</div><div class="txt">&#36824;&#27809;&#26377;&#36816;&#21160;&#35760;&#24405;</div></div>
+        </div>
+      </div>
+
+      <!-- Weight Record -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">&#20307;&#37325;&#35760;&#24405;</div>
+        </div>
+        <div style="background:var(--card);border-radius:var(--radius-sm);padding:12px;box-shadow:var(--shadow);">
+          <div class="weight-row">
+            <input type="number" id="weightInput" placeholder="&#36755;&#20837;&#20170;&#26085;&#20307;&#37325; (kg)" step="0.1" style="padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--radius-xs);font-size:14px;">
+            <button class="btn btn-primary btn-sm" onclick="recordWeight()">&#35760;&#24405;</button>
+          </div>
+          <div style="font-size:12px;color:var(--text-secondary);" id="weightStatus">&#27599;&#26085;&#35760;&#24405;&#20307;&#37325;&#65292;&#36319;&#36394;&#21464;&#21270;&#36235;&#21183;</div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ===== Exercise Page ===== -->
-  <div id="exercisePage" class="page">
-    <div class="header">
-      <div class="header-top">
-        <div class="header-greeting">运动记录</div>
-        <div class="section-action" onclick="openAddExercise()">+ 添加</div>
-      </div>
+  <!-- ===== Chat Page ===== -->
+  <div id="chatPage" class="page">
+    <div class="page-header">
+      <div class="page-header-title">AI &#20581;&#24247;&#21161;&#25163;</div>
     </div>
-    <div class="section" style="padding-top:16px;">
-      <div id="exerciseList">
-        <div class="empty-state"><div class="icon">🏋️</div><div class="text">今天还没有运动记录<br>开始你的第一个训练吧！</div></div>
+    <div class="page-body">
+      <button class="chat-new-btn" onclick="createChatSession()">+ &#26032;&#24314;&#23545;&#35805;</button>
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">&#21382;&#21490;&#23545;&#35805;</div>
+        </div>
+        <div id="chatSessionList">
+          <div class="empty"><div class="ico">&#128172;</div><div class="txt">&#24320;&#22987;&#20320;&#30340;&#31532;&#19968;&#27425;&#23545;&#35805;<br>AI &#21161;&#25163;&#23558;&#20026;&#20320;&#25552;&#20379;&#20581;&#24247;&#24314;&#35758;</div></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ===== Sleep Page ===== -->
-  <div id="sleepPage" class="page">
-    <div class="header">
-      <div class="header-top"><div class="header-greeting">睡眠记录</div></div>
+  <!-- Chat Detail View (overlay) -->
+  <div id="chatView" class="chat-view">
+    <div class="chat-header">
+      <button class="chat-back" onclick="closeChatView()">&#8249;</button>
+      <div class="chat-header-title" id="chatViewTitle">&#26032;&#23545;&#35805;</div>
     </div>
-    <div class="section" style="padding-top:16px;">
-      <div class="sleep-card">
-        <div style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;">记录昨晚睡眠</div>
-        <div style="display:flex;gap:10px;margin-bottom:12px;">
-          <div class="input-group" style="flex:1;margin:0;">
-            <label>入睡时间</label>
-            <input type="time" id="sleepStart" value="23:00">
-          </div>
-          <div class="input-group" style="flex:1;margin:0;">
-            <label>起床时间</label>
-            <input type="time" id="sleepEnd" value="07:00">
-          </div>
-        </div>
-        <div style="margin-bottom:12px;">
-          <label style="font-size:13px;font-weight:600;color:var(--text-secondary);">睡眠质量</label>
-          <div class="sleep-quality" id="sleepStars">
-            <span class="sleep-star" onclick="setSleepQuality(1)">⭐</span>
-            <span class="sleep-star" onclick="setSleepQuality(2)">⭐</span>
-            <span class="sleep-star" onclick="setSleepQuality(3)">⭐</span>
-            <span class="sleep-star" onclick="setSleepQuality(4)">☆</span>
-            <span class="sleep-star" onclick="setSleepQuality(5)">☆</span>
-          </div>
-        </div>
-        <button class="btn-primary" onclick="recordSleep()">保存记录</button>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg assistant"><div class="msg-bubble">&#20320;&#22909;&#65281;&#25105;&#26159;&#20320;&#30340; AI &#20581;&#24247;&#21161;&#25163;&#12290;&#21487;&#20197;&#38382;&#25105;&#20851;&#20110;&#39278;&#39135;&#12289;&#36816;&#21160;&#12289;&#20581;&#24247;&#35745;&#21010;&#30340;&#20219;&#20309;&#38382;&#39064;&#65281;</div></div>
+    </div>
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="chatInput" placeholder="&#36755;&#20837;&#28040;&#24687;..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+      <button class="chat-send" id="chatSendBtn" onclick="sendChat()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== Stats Page ===== -->
+  <div id="statsPage" class="page">
+    <div class="page-header">
+      <div class="page-header-title">&#32479;&#35745;</div>
+    </div>
+    <div class="page-body">
+      <div class="stat-period">
+        <button class="stat-period-btn active" onclick="setStatPeriod(7, this)">&#36817;7&#22825;</button>
+        <button class="stat-period-btn" onclick="setStatPeriod(30, this)">&#36817;30&#22825;</button>
       </div>
-      <div id="sleepHistory"></div>
+
+      <!-- Calorie Trend -->
+      <div class="chart-card">
+        <div class="chart-title">&#21345;&#36335;&#37324;&#36235;&#21183;</div>
+        <svg id="calChart" class="chart-svg" height="120" viewBox="0 0 320 120"></svg>
+        <div class="chart-summary" id="calChartSummary"></div>
+      </div>
+
+      <!-- Weight Trend -->
+      <div class="chart-card">
+        <div class="chart-title">&#20307;&#37325;&#36235;&#21183;</div>
+        <svg id="wtChart" class="chart-svg" height="120" viewBox="0 0 320 120"></svg>
+        <div class="chart-summary" id="wtChartSummary"></div>
+      </div>
+
+      <!-- Active Plan -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">&#20581;&#36523;&#35745;&#21010;</div>
+        </div>
+        <div id="planArea">
+          <div style="text-align:center;padding:20px;">
+            <div style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;">&#36824;&#27809;&#26377;&#20581;&#36523;&#35745;&#21010;</div>
+            <button class="btn btn-primary btn-sm" style="width:auto;padding:10px 24px;" onclick="openGenPlan()">&#29983;&#25104; AI &#35745;&#21010;</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- ===== Profile Page ===== -->
-  <div id="profilePage" class="page" style="padding-bottom:100px;">
-    <div class="profile-header">
-      <div class="profile-avatar">💪</div>
-      <div class="profile-name" id="profileName">--</div>
-      <div class="profile-phone" id="profilePhone">--</div>
+  <div id="profilePage" class="page">
+    <div class="profile-top">
+      <div class="profile-avatar">&#127811;</div>
+      <div class="profile-name" id="profName">--</div>
+      <div class="profile-phone" id="profPhone">--</div>
     </div>
-    <div class="profile-stats">
-      <div class="profile-stat">
-        <div class="val" id="pHeight">--</div>
-        <div class="label">身高(cm)</div>
+    <div class="profile-data">
+      <div class="profile-data-item">
+        <div class="v" id="profH">--</div>
+        <div class="l">&#36523;&#39640;(cm)</div>
       </div>
-      <div class="profile-stat">
-        <div class="val" id="pWeight">--</div>
-        <div class="label">体重(kg)</div>
+      <div class="profile-data-item">
+        <div class="v" id="profW">--</div>
+        <div class="l">&#20307;&#37325;(kg)</div>
       </div>
-      <div class="profile-stat">
-        <div class="val" id="pGoal">--</div>
-        <div class="label">目标</div>
-      </div>
-    </div>
-    <div class="profile-section">
-      <div class="section-title" style="margin-bottom:12px;">个人设置</div>
-      <div class="profile-item" onclick="openEditProfile()">
-        <div class="left"><span class="icon">📏</span><span class="text">编辑身体数据</span></div>
-        <span class="arrow">›</span>
-      </div>
-      <div class="profile-item">
-        <div class="left"><span class="icon">🎯</span><span class="text">每日卡路里目标</span></div>
-        <span class="arrow" id="pCalTarget">2000 kcal ›</span>
-      </div>
-      <div class="profile-item">
-        <div class="left"><span class="icon">🤖</span><span class="text">AI 服务偏好</span></div>
-        <span class="arrow">Kimi ›</span>
+      <div class="profile-data-item">
+        <div class="v" id="profG">--</div>
+        <div class="l">&#30446;&#26631;</div>
       </div>
     </div>
-    <button class="btn-logout" onclick="doLogout()">退出登录</button>
+    <div class="profile-menu">
+      <div class="profile-menu-item" onclick="openEditProfile()">
+        <div class="profile-menu-left"><span class="ico">&#9878;&#65039;</span><span class="txt">&#32534;&#36753;&#36523;&#20307;&#25968;&#25454;</span></div>
+        <span class="profile-menu-right">&#8250;</span>
+      </div>
+      <div class="profile-menu-item" onclick="openCalTarget()">
+        <div class="profile-menu-left"><span class="ico">&#127919;</span><span class="txt">&#27599;&#26085;&#21345;&#36335;&#37324;&#30446;&#26631;</span></div>
+        <span class="profile-menu-right" id="profCal">2000 kcal &#8250;</span>
+      </div>
+      <div class="profile-menu-item" onclick="openAiPref()">
+        <div class="profile-menu-left"><span class="ico">&#129302;</span><span class="txt">AI &#26381;&#21153;&#20559;&#22909;</span></div>
+        <span class="profile-menu-right" id="profAi">Kimi &#8250;</span>
+      </div>
+    </div>
+    <div style="padding:20px;">
+      <button class="btn btn-danger-light" onclick="doLogout()">&#36864;&#20986;&#30331;&#24405;</button>
+    </div>
   </div>
 
   <!-- ===== Tab Bar ===== -->
-  <div class="tab-bar" id="tabBar">
+  <div class="tab-bar hidden" id="tabBar">
     <button class="tab-item active" onclick="switchPage('home')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-      <span>首页</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      <span>&#39318;&#39029;</span>
     </button>
-    <button class="tab-item" onclick="switchPage('exercise')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
-      <span>运动</span>
+    <button class="tab-item" onclick="switchPage('chat')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <span>&#23545;&#35805;</span>
     </button>
-    <button class="tab-item" onclick="openAddMeal()">
-      <div class="fab">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-      </div>
-    </button>
-    <button class="tab-item" onclick="switchPage('sleep')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-      <span>睡眠</span>
+    <button class="tab-item" onclick="switchPage('stats')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="6" width="4" height="15" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg>
+      <span>&#32479;&#35745;</span>
     </button>
     <button class="tab-item" onclick="switchPage('profile')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span>我的</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>&#25105;&#30340;</span>
     </button>
   </div>
 
   <!-- ===== Add Meal Modal ===== -->
   <div class="modal-overlay" id="mealModal">
     <div class="modal">
-      <div class="modal-title">添加饮食记录</div>
-      <div class="meal-type-select">
-        <button class="meal-type-btn active" data-type="breakfast" onclick="selectMealType(this)">🌅 早餐</button>
-        <button class="meal-type-btn" data-type="lunch" onclick="selectMealType(this)">☀️ 午餐</button>
-        <button class="meal-type-btn" data-type="dinner" onclick="selectMealType(this)">🌙 晚餐</button>
-        <button class="meal-type-btn" data-type="snack" onclick="selectMealType(this)">🍪 加餐</button>
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#28155;&#21152;&#39278;&#39135;&#35760;&#24405;</div>
+      <div class="pill-row" id="mealTypePills">
+        <button class="pill active" data-type="breakfast" onclick="pickMealType(this)">&#127749; &#26089;&#39184;</button>
+        <button class="pill" data-type="lunch" onclick="pickMealType(this)">&#9728;&#65039; &#21320;&#39184;</button>
+        <button class="pill" data-type="dinner" onclick="pickMealType(this)">&#127769; &#26202;&#39184;</button>
+        <button class="pill" data-type="snack" onclick="pickMealType(this)">&#127850; &#21152;&#39184;</button>
       </div>
       <div class="input-group">
-        <label>食物名称</label>
-        <input type="text" id="foodName" placeholder="例如：鸡胸肉沙拉">
+        <label>&#39135;&#29289;&#21517;&#31216;</label>
+        <input type="text" id="mealFoodName" placeholder="&#20363;&#22914;&#65306;&#40481;&#33016;&#32905;&#27801;&#25289;">
       </div>
       <div class="input-group">
-        <label>热量 (kcal)</label>
-        <input type="number" id="foodCalories" placeholder="0">
+        <label>&#28909;&#37327; (kcal)</label>
+        <input type="number" id="mealCal" placeholder="0">
       </div>
-      <div class="nutrient-grid">
-        <div class="input-group">
-          <label>蛋白质(g)</label>
-          <input type="number" id="foodProtein" placeholder="0" step="0.1">
-        </div>
-        <div class="input-group">
-          <label>脂肪(g)</label>
-          <input type="number" id="foodFat" placeholder="0" step="0.1">
-        </div>
-        <div class="input-group">
-          <label>碳水(g)</label>
-          <input type="number" id="foodCarbs" placeholder="0" step="0.1">
-        </div>
+      <div class="nut-grid">
+        <div class="input-group"><label>&#34507;&#30333;&#36136;(g)</label><input type="number" id="mealP" placeholder="0" step="0.1"></div>
+        <div class="input-group"><label>&#33026;&#32938;(g)</label><input type="number" id="mealF" placeholder="0" step="0.1"></div>
+        <div class="input-group"><label>&#30899;&#27700;(g)</label><input type="number" id="mealC" placeholder="0" step="0.1"></div>
       </div>
-      <button class="btn-primary" onclick="saveMeal()">保存</button>
-      <button class="btn-primary" onclick="closeMealModal()" style="background:#F1F5F9;color:var(--text);margin-top:8px;">取消</button>
+      <button class="btn btn-primary mt-8" onclick="saveMeal()">&#20445;&#23384;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('mealModal')">&#21462;&#28040;</button>
     </div>
   </div>
 
   <!-- ===== Add Exercise Modal ===== -->
   <div class="modal-overlay" id="exerciseModal">
     <div class="modal">
-      <div class="modal-title">添加运动记录</div>
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#28155;&#21152;&#36816;&#21160;&#35760;&#24405;</div>
       <div class="input-group">
-        <label>运动名称</label>
-        <input type="text" id="exName" placeholder="例如：跑步、力量训练">
+        <label>&#36816;&#21160;&#21517;&#31216;</label>
+        <input type="text" id="exName" placeholder="&#20363;&#22914;&#65306;&#36305;&#27493;&#12289;&#21147;&#37327;&#35757;&#32451;">
       </div>
-      <div class="nutrient-grid">
-        <div class="input-group">
-          <label>时长(分钟)</label>
-          <input type="number" id="exDuration" placeholder="30">
-        </div>
-        <div class="input-group">
-          <label>消耗(kcal)</label>
-          <input type="number" id="exCalories" placeholder="200">
-        </div>
-        <div class="input-group">
-          <label>组数</label>
-          <input type="number" id="exSets" placeholder="0">
+      <div class="nut-grid">
+        <div class="input-group"><label>&#26102;&#38271;(&#20998;&#38047;)</label><input type="number" id="exDur" placeholder="30"></div>
+        <div class="input-group"><label>&#28040;&#32791;(kcal)</label><input type="number" id="exBurn" placeholder="200"></div>
+        <div class="input-group"><label>&#32452;&#25968;</label><input type="number" id="exSets" placeholder="0"></div>
+      </div>
+      <div class="pill-row mt-8">
+        <button class="pill active" data-int="medium" onclick="pickIntensity(this)">&#20013;&#31561;</button>
+        <button class="pill" data-int="low" onclick="pickIntensity(this)">&#20302;&#24378;</button>
+        <button class="pill" data-int="high" onclick="pickIntensity(this)">&#39640;&#24378;</button>
+      </div>
+      <button class="btn btn-primary mt-8" onclick="saveExercise()">&#20445;&#23384;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('exerciseModal')">&#21462;&#28040;</button>
+    </div>
+  </div>
+
+  <!-- ===== Add Sleep Modal ===== -->
+  <div class="modal-overlay" id="sleepModal">
+    <div class="modal">
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#35760;&#24405;&#30561;&#30496;</div>
+      <div style="display:flex;gap:10px;">
+        <div class="input-group" style="flex:1"><label>&#20837;&#30561;&#26102;&#38388;</label><input type="time" id="slpStart" value="23:00"></div>
+        <div class="input-group" style="flex:1"><label>&#36215;&#24202;&#26102;&#38388;</label><input type="time" id="slpEnd" value="07:00"></div>
+      </div>
+      <div class="input-group">
+        <label>&#30561;&#30496;&#36136;&#37327;</label>
+        <div style="display:flex;gap:6px;font-size:24px;cursor:pointer;" id="sleepStars">
+          <span onclick="setSlpQ(1)">&#11088;</span><span onclick="setSlpQ(2)">&#11088;</span><span onclick="setSlpQ(3)">&#11088;</span><span onclick="setSlpQ(4)">&#9734;</span><span onclick="setSlpQ(5)">&#9734;</span>
         </div>
       </div>
-      <button class="btn-primary" onclick="saveExercise()">保存</button>
-      <button class="btn-primary" onclick="closeExerciseModal()" style="background:#F1F5F9;color:var(--text);margin-top:8px;">取消</button>
+      <button class="btn btn-primary mt-8" onclick="saveSleep()">&#20445;&#23384;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('sleepModal')">&#21462;&#28040;</button>
+    </div>
+  </div>
+
+  <!-- ===== Photo Recognition Modal ===== -->
+  <div class="modal-overlay" id="recogModal">
+    <div class="modal">
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#25293;&#29031;&#35782;&#21035;</div>
+      <div class="pill-row" style="justify-content:center;">
+        <button class="pill active" data-rtype="food" onclick="pickRecogType(this)">&#127860; &#39135;&#29289;</button>
+        <button class="pill" data-rtype="exercise" onclick="pickRecogType(this)">&#127939; &#36816;&#21160;</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;">
+        <button class="btn btn-primary" onclick="triggerCamera()" style="flex:1">&#128247; &#25293;&#29031;</button>
+        <button class="btn btn-outline" onclick="triggerGallery()" style="flex:1">&#128444;&#65039; &#30456;&#20876;</button>
+      </div>
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleImagePick(event)">
+      <input type="file" id="galleryInput" accept="image/*" style="display:none" onchange="handleImagePick(event)">
+      <div id="recogPreview" style="display:none;">
+        <div class="recog-preview">
+          <img id="recogImg" src="">
+          <div class="recog-loading" id="recogLoading" style="display:none;">
+            <div class="spinner"></div>
+            <div style="font-size:14px;color:var(--text-secondary);">AI &#27491;&#22312;&#20998;&#26512;...</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('recogModal')">&#21462;&#28040;</button>
+    </div>
+  </div>
+
+  <!-- ===== Recognition Result Modal ===== -->
+  <div class="modal-overlay" id="recogResultModal">
+    <div class="modal">
+      <div class="modal-bar"></div>
+      <div class="modal-title" id="recogResultTitle">&#35782;&#21035;&#32467;&#26524;</div>
+      <div id="recogResultContent"></div>
+      <div id="recogMealType" style="display:none;">
+        <div class="input-group"><label>&#39184;&#27425;</label></div>
+        <div class="pill-row" id="recogMealPills">
+          <button class="pill active" data-type="breakfast" onclick="pickRecogMealType(this)">&#26089;&#39184;</button>
+          <button class="pill" data-type="lunch" onclick="pickRecogMealType(this)">&#21320;&#39184;</button>
+          <button class="pill" data-type="dinner" onclick="pickRecogMealType(this)">&#26202;&#39184;</button>
+          <button class="pill" data-type="snack" onclick="pickRecogMealType(this)">&#21152;&#39184;</button>
+        </div>
+      </div>
+      <button class="btn btn-primary mt-8" id="recogSaveBtn" onclick="saveRecogResult()">&#30830;&#35748;&#20445;&#23384;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('recogResultModal')">&#21462;&#28040;</button>
     </div>
   </div>
 
   <!-- ===== Edit Profile Modal ===== -->
   <div class="modal-overlay" id="profileModal">
     <div class="modal">
-      <div class="modal-title">编辑身体数据</div>
-      <div class="nutrient-grid">
-        <div class="input-group">
-          <label>身高(cm)</label>
-          <input type="number" id="editHeight" placeholder="175" step="0.1">
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#32534;&#36753;&#36523;&#20307;&#25968;&#25454;</div>
+      <div class="nut-grid">
+        <div class="input-group"><label>&#36523;&#39640;(cm)</label><input type="number" id="editH" placeholder="175" step="0.1"></div>
+        <div class="input-group"><label>&#20307;&#37325;(kg)</label><input type="number" id="editW" placeholder="70" step="0.1"></div>
+        <div class="input-group"><label>&#30446;&#26631;(kg)</label><input type="number" id="editTW" placeholder="65" step="0.1"></div>
+      </div>
+      <div class="input-group">
+        <label>&#20581;&#36523;&#30446;&#26631;</label>
+        <div class="pill-row" id="goalPills">
+          <button class="pill active" data-goal="lose_weight" onclick="pickGoal(this)">&#20943;&#33026;</button>
+          <button class="pill" data-goal="build_muscle" onclick="pickGoal(this)">&#22686;&#32908;</button>
+          <button class="pill" data-goal="maintain" onclick="pickGoal(this)">&#20445;&#25345;</button>
+          <button class="pill" data-goal="improve_health" onclick="pickGoal(this)">&#20581;&#24247;</button>
         </div>
-        <div class="input-group">
-          <label>体重(kg)</label>
-          <input type="number" id="editWeight" placeholder="70" step="0.1">
-        </div>
-        <div class="input-group">
-          <label>目标(kg)</label>
-          <input type="number" id="editTarget" placeholder="65" step="0.1">
+      </div>
+      <button class="btn btn-primary mt-8" onclick="saveProfile()">&#20445;&#23384;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('profileModal')">&#21462;&#28040;</button>
+    </div>
+  </div>
+
+  <!-- ===== Generate Plan Modal ===== -->
+  <div class="modal-overlay" id="planModal">
+    <div class="modal">
+      <div class="modal-bar"></div>
+      <div class="modal-title">&#29983;&#25104; AI &#20581;&#36523;&#35745;&#21010;</div>
+      <div class="input-group">
+        <label>&#30446;&#26631;&#31867;&#22411;</label>
+        <div class="pill-row" id="planGoalPills">
+          <button class="pill active" data-goal="lose_weight" onclick="pickPlanGoal(this)">&#20943;&#33026;</button>
+          <button class="pill" data-goal="gain_muscle" onclick="pickPlanGoal(this)">&#22686;&#32908;</button>
+          <button class="pill" data-goal="maintain" onclick="pickPlanGoal(this)">&#20445;&#25345;</button>
         </div>
       </div>
       <div class="input-group">
-        <label>健身目标</label>
-        <div class="meal-type-select">
-          <button class="meal-type-btn active" data-goal="lose_weight" onclick="selectGoal(this)">减脂</button>
-          <button class="meal-type-btn" data-goal="build_muscle" onclick="selectGoal(this)">增肌</button>
-          <button class="meal-type-btn" data-goal="maintain" onclick="selectGoal(this)">保持</button>
-          <button class="meal-type-btn" data-goal="improve_health" onclick="selectGoal(this)">健康</button>
-        </div>
+        <label>&#35745;&#21010;&#21608;&#26399;(&#21608;)</label>
+        <input type="number" id="planWeeks" value="4" min="1" max="52">
       </div>
-      <button class="btn-primary" onclick="saveProfile()">保存</button>
-      <button class="btn-primary" onclick="closeProfileModal()" style="background:#F1F5F9;color:var(--text);margin-top:8px;">取消</button>
+      <button class="btn btn-primary mt-8" id="genPlanBtn" onclick="generatePlan()">&#29983;&#25104;&#35745;&#21010;</button>
+      <button class="btn btn-secondary mt-8" onclick="closeModal('planModal')">&#21462;&#28040;</button>
     </div>
   </div>
 
@@ -648,24 +881,34 @@ body {
 </div>
 
 <script>
+// ===== State =====
 const API = '/api/v1';
 let token = localStorage.getItem('gs_token') || '';
 let currentUser = null;
+let currentDate = new Date().toISOString().slice(0, 10);
 let selectedMealType = 'breakfast';
 let selectedGoal = 'lose_weight';
-let sleepQualityVal = 3;
+let selectedIntensity = 'medium';
+let sleepQuality = 3;
+let recogType = 'food';
+let recogMealType = 'lunch';
+let recogData = null;
+let currentSessionId = null;
+let chatStreaming = false;
+let planGoalType = 'lose_weight';
+let statDays = 7;
 
 // ===== Utility =====
-function headers() {
-  return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+function hdrs() {
+  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
 }
 
 async function api(method, path, body) {
-  const opts = { method, headers: headers() };
+  const opts = { method, headers: hdrs() };
   if (body) opts.body = JSON.stringify(body);
   const res = await fetch(API + path, opts);
   const data = await res.json();
-  if (!res.ok) throw new Error(data.detail || '请求失败');
+  if (!res.ok) throw new Error(data.detail || 'Request failed');
   return data;
 }
 
@@ -673,17 +916,29 @@ function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2000);
+  setTimeout(() => el.classList.remove('show'), 2200);
 }
 
-function today() {
-  return new Date().toISOString().slice(0, 10);
+function fmtDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const m = d.getMonth() + 1;
+  const day = d.getDate();
+  const wk = ['日', '一', '二', '三', '四', '五', '六'][d.getDay()];
+  return { text: m + '月' + day + '日', sub: '星期' + wk };
+}
+
+function isToday(dateStr) {
+  return dateStr === new Date().toISOString().slice(0, 10);
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
 }
 
 // ===== Auth =====
 function switchAuthTab(tab) {
   document.querySelectorAll('.auth-tab').forEach((t, i) => {
-    t.classList.toggle('active', (tab === 'login' ? i === 0 : i === 1));
+    t.classList.toggle('active', tab === 'login' ? i === 0 : i === 1);
   });
   document.getElementById('loginForm').style.display = tab === 'login' ? 'block' : 'none';
   document.getElementById('registerForm').style.display = tab === 'register' ? 'block' : 'none';
@@ -699,9 +954,7 @@ async function doLogin() {
     token = data.data.access_token;
     localStorage.setItem('gs_token', token);
     enterApp();
-  } catch (e) {
-    document.getElementById('authError').textContent = e.message;
-  }
+  } catch (e) { document.getElementById('authError').textContent = e.message; }
 }
 
 async function doRegister() {
@@ -714,9 +967,7 @@ async function doRegister() {
     token = data.data.access_token;
     localStorage.setItem('gs_token', token);
     enterApp();
-  } catch (e) {
-    document.getElementById('authError').textContent = e.message;
-  }
+  } catch (e) { document.getElementById('authError').textContent = e.message; }
 }
 
 function doLogout() {
@@ -732,11 +983,28 @@ function doLogout() {
 function switchPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(name + 'Page').classList.add('active');
+  const tabs = ['home', 'chat', 'stats', 'profile'];
   document.querySelectorAll('.tab-item').forEach((t, i) => {
-    const pages = ['home', 'exercise', null, 'sleep', 'profile'];
-    t.classList.toggle('active', pages[i] === name);
+    t.classList.toggle('active', tabs[i] === name);
   });
+  if (name === 'chat') loadChatSessions();
+  if (name === 'stats') loadStats();
   if (name === 'profile') loadProfile();
+}
+
+// ===== Date Navigation =====
+function updateDateDisplay() {
+  const f = fmtDate(currentDate);
+  document.getElementById('dateText').textContent = isToday(currentDate) ? '今天 ' + f.text : f.text;
+  document.getElementById('dateSub').textContent = f.sub;
+}
+
+function changeDate(delta) {
+  const d = new Date(currentDate + 'T00:00:00');
+  d.setDate(d.getDate() + delta);
+  currentDate = d.toISOString().slice(0, 10);
+  updateDateDisplay();
+  loadDashboard();
 }
 
 // ===== Enter App =====
@@ -745,286 +1013,709 @@ async function enterApp() {
   document.getElementById('homePage').classList.add('active');
   document.getElementById('tabBar').classList.remove('hidden');
 
-  // Set greeting
-  const hour = new Date().getHours();
-  const greet = hour < 12 ? '早上好' : hour < 18 ? '下午好' : '晚上好';
-
   try {
     const me = await api('GET', '/users/me');
     currentUser = me.data;
-    document.getElementById('greeting').textContent = greet + '，' + (currentUser.nickname || '用户');
-  } catch {
-    document.getElementById('greeting').textContent = greet + '！';
-  }
+  } catch { currentUser = {}; }
 
-  const d = new Date();
-  const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
-  document.getElementById('todayDate').textContent =
-    `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日 星期${weekdays[d.getDay()]}`;
-
+  updateDateDisplay();
   loadDashboard();
 }
 
 // ===== Dashboard =====
 async function loadDashboard() {
   try {
-    const stats = await api('GET', `/stats/daily?date=${today()}`);
+    const stats = await api('GET', '/stats/daily?date=' + currentDate);
     const s = stats.data;
     const target = s.calorie_target || 2000;
     const consumed = Math.round(s.calories_consumed || 0);
     const remain = Math.max(0, target - consumed);
     const pct = Math.min(consumed / target, 1);
 
-    document.getElementById('calConsumed').textContent = consumed;
+    document.getElementById('calNum').textContent = consumed;
     document.getElementById('calTarget').textContent = target + ' kcal';
     document.getElementById('calEaten').textContent = consumed + ' kcal';
     document.getElementById('calRemain').textContent = remain + ' kcal';
 
-    // Animate ring
-    const arc = document.getElementById('calorieArc');
-    const circumference = 2 * Math.PI * 38;
-    arc.style.strokeDasharray = circumference;
-    arc.style.strokeDashoffset = circumference * (1 - pct);
-    if (pct > 0.9) arc.style.stroke = 'var(--danger)';
-    else if (pct > 0.7) arc.style.stroke = 'var(--warning)';
-    else arc.style.stroke = 'var(--primary)';
+    // Ring animation
+    const circ = 2 * Math.PI * 34;
+    const arc = document.getElementById('calArc');
+    arc.style.strokeDasharray = circ;
+    arc.style.strokeDashoffset = circ * (1 - pct);
+    arc.style.stroke = pct > 0.9 ? 'var(--danger)' : pct > 0.7 ? 'var(--warning)' : 'var(--primary)';
 
     // Macros
-    const proteinTarget = 120, fatTarget = 60, carbsTarget = 250;
-    document.getElementById('proteinVal').textContent = Math.round(s.protein_g || 0) + 'g';
-    document.getElementById('fatVal').textContent = Math.round(s.fat_g || 0) + 'g';
-    document.getElementById('carbsVal').textContent = Math.round(s.carbs_g || 0) + 'g';
-    document.getElementById('proteinBar').style.width = Math.min(100, (s.protein_g||0)/proteinTarget*100) + '%';
-    document.getElementById('fatBar').style.width = Math.min(100, (s.fat_g||0)/fatTarget*100) + '%';
-    document.getElementById('carbsBar').style.width = Math.min(100, (s.carbs_g||0)/carbsTarget*100) + '%';
+    const pt = (currentUser && currentUser.daily_calorie_target) ? Math.round(target * 0.3 / 4) : 120;
+    const ft = (currentUser && currentUser.daily_calorie_target) ? Math.round(target * 0.25 / 9) : 60;
+    const ct = (currentUser && currentUser.daily_calorie_target) ? Math.round(target * 0.45 / 4) : 250;
+    document.getElementById('pVal').textContent = Math.round(s.protein_g || 0) + 'g';
+    document.getElementById('fVal').textContent = Math.round(s.fat_g || 0) + 'g';
+    document.getElementById('cVal').textContent = Math.round(s.carbs_g || 0) + 'g';
+    document.getElementById('pBar').style.width = Math.min(100, (s.protein_g || 0) / pt * 100) + '%';
+    document.getElementById('fBar').style.width = Math.min(100, (s.fat_g || 0) / ft * 100) + '%';
+    document.getElementById('cBar').style.width = Math.min(100, (s.carbs_g || 0) / ct * 100) + '%';
 
-    // Exercise
-    document.getElementById('exerciseMin').innerHTML = (s.exercise_minutes || 0) + '<span class="stat-unit"> 分钟</span>';
-    document.getElementById('exerciseCal').textContent = '消耗 ' + Math.round(s.calories_burned || 0) + ' kcal';
+    // Mini stats
+    document.getElementById('exMin').innerHTML = (s.exercise_minutes || 0) + '<span class="unit"> 分钟</span>';
+    document.getElementById('exCal').textContent = '消耗 ' + Math.round(s.calories_burned || 0) + ' kcal';
 
-    // Sleep
     if (s.sleep_duration_minutes) {
       const h = Math.floor(s.sleep_duration_minutes / 60);
       const m = s.sleep_duration_minutes % 60;
-      document.getElementById('sleepHours').innerHTML = h + (m > 0 ? '.' + Math.round(m/6) : '') + '<span class="stat-unit"> 小时</span>';
-      document.getElementById('sleepQuality').textContent = '质量: ' + '⭐'.repeat(s.sleep_quality || 3);
+      document.getElementById('slpH').innerHTML = h + (m > 0 ? '.' + Math.round(m / 6) : '') + '<span class="unit"> 小时</span>';
+      const q = s.sleep_quality || 3;
+      document.getElementById('slpQ').textContent = '质量 ' + '\u2B50'.repeat(q);
+    } else {
+      document.getElementById('slpH').innerHTML = '--<span class="unit"> 小时</span>';
+      document.getElementById('slpQ').textContent = '暂无记录';
     }
 
-  } catch (e) {
-    console.error('Stats error:', e);
-  }
+    if (s.weight_kg) {
+      document.getElementById('wtVal').innerHTML = s.weight_kg + '<span class="unit"> kg</span>';
+    }
+
+  } catch (e) { console.error('Dashboard err:', e); }
 
   loadMeals();
+  loadExercises();
 }
 
 // ===== Meals =====
 async function loadMeals() {
   try {
-    const res = await api('GET', `/diet/daily-summary?record_date=${today()}`);
+    const res = await api('GET', '/diet/daily-summary?record_date=' + currentDate);
     const d = res.data;
-    const mealList = document.getElementById('mealList');
-
-    const emojis = { breakfast: '🌅', lunch: '☀️', dinner: '🌙', snack: '🍪' };
+    const el = document.getElementById('mealList');
+    const icons = { breakfast: '\u{1F305}', lunch: '\u2600\uFE0F', dinner: '\u{1F319}', snack: '\u{1F36A}' };
     const names = { breakfast: '早餐', lunch: '午餐', dinner: '晚餐', snack: '加餐' };
 
     if (d.meal_count === 0) {
-      mealList.innerHTML = '<div class="empty-state"><div class="icon">🍽️</div><div class="text">今天还没有饮食记录<br>点击 + 开始记录</div></div>';
+      el.innerHTML = '<div class="empty"><div class="ico">\u{1F37D}</div><div class="txt">还没有饮食记录<br>点击拍照识别或 + 添加</div></div>';
       return;
     }
 
     let html = '';
     for (const [type, foods] of Object.entries(d.meals)) {
       for (const f of foods) {
-        html += `
-          <div class="meal-card">
-            <div class="meal-left">
-              <div class="meal-emoji">${emojis[type] || '🍽️'}</div>
-              <div>
-                <div class="meal-name">${names[type] || type}</div>
-                <div class="meal-food">${f.food_name}</div>
-              </div>
-            </div>
-            <div class="meal-cal">${Math.round(f.calories)} <span>kcal</span></div>
-          </div>`;
+        html += '<div class="record-card">' +
+          '<div class="record-left">' +
+          '<div class="record-ico">' + (icons[type] || '\u{1F37D}') + '</div>' +
+          '<div class="record-info">' +
+          '<div class="record-name">' + f.food_name + '</div>' +
+          '<div class="record-meta">' + (names[type] || type) + (f.serving_size ? ' \u00B7 ' + f.serving_size : '') + '</div>' +
+          '</div></div>' +
+          '<div class="record-val">' + Math.round(f.calories) + ' <span class="u">kcal</span></div>' +
+          '</div>';
       }
     }
-    mealList.innerHTML = html;
-  } catch (e) {
-    console.error('Meals error:', e);
-  }
+    el.innerHTML = html;
+  } catch (e) { console.error('Meals err:', e); }
+}
+
+// ===== Exercises =====
+async function loadExercises() {
+  try {
+    const res = await api('GET', '/exercise/records?record_date=' + currentDate);
+    const list = res.data || [];
+    const el = document.getElementById('exList');
+    if (list.length === 0) {
+      el.innerHTML = '<div class="empty"><div class="ico">\u{1F3CB}</div><div class="txt">还没有运动记录</div></div>';
+      return;
+    }
+    el.innerHTML = list.map(function(e) {
+      return '<div class="record-card">' +
+        '<div class="record-left">' +
+        '<div class="record-ico">' + (e.exercise_type === 'cardio' ? '\u{1F3C3}' : '\u{1F3CB}') + '</div>' +
+        '<div class="record-info">' +
+        '<div class="record-name">' + e.exercise_name + '</div>' +
+        '<div class="record-meta">' + (e.duration_minutes || 0) + '分钟' + (e.sets ? ' \u00B7 ' + e.sets + '组' : '') + '</div>' +
+        '</div></div>' +
+        '<div class="record-val">' + Math.round(e.calories_burned || 0) + ' <span class="u">kcal</span></div>' +
+        '</div>';
+    }).join('');
+  } catch (e) { console.error('Exercise err:', e); }
 }
 
 // ===== Add Meal =====
 function openAddMeal() {
   document.getElementById('mealModal').classList.add('active');
-  document.getElementById('foodName').value = '';
-  document.getElementById('foodCalories').value = '';
-  document.getElementById('foodProtein').value = '';
-  document.getElementById('foodFat').value = '';
-  document.getElementById('foodCarbs').value = '';
+  document.getElementById('mealFoodName').value = '';
+  document.getElementById('mealCal').value = '';
+  document.getElementById('mealP').value = '';
+  document.getElementById('mealF').value = '';
+  document.getElementById('mealC').value = '';
+  selectedMealType = 'breakfast';
+  document.querySelectorAll('#mealTypePills .pill').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.type === 'breakfast');
+  });
 }
-function closeMealModal() { document.getElementById('mealModal').classList.remove('active'); }
 
-function selectMealType(el) {
-  document.querySelectorAll('#mealModal .meal-type-btn').forEach(b => b.classList.remove('active'));
+function pickMealType(el) {
+  document.querySelectorAll('#mealTypePills .pill').forEach(function(p) { p.classList.remove('active'); });
   el.classList.add('active');
   selectedMealType = el.dataset.type;
 }
 
 async function saveMeal() {
-  const name = document.getElementById('foodName').value.trim();
-  const cal = parseFloat(document.getElementById('foodCalories').value) || 0;
+  var name = document.getElementById('mealFoodName').value.trim();
   if (!name) { toast('请输入食物名称'); return; }
-
   try {
     await api('POST', '/diet/records', {
-      record_date: today(),
+      record_date: currentDate,
       meal_type: selectedMealType,
       food_name: name,
-      calories: cal,
-      protein_g: parseFloat(document.getElementById('foodProtein').value) || 0,
-      fat_g: parseFloat(document.getElementById('foodFat').value) || 0,
-      carbs_g: parseFloat(document.getElementById('foodCarbs').value) || 0,
+      calories: parseFloat(document.getElementById('mealCal').value) || 0,
+      protein_g: parseFloat(document.getElementById('mealP').value) || 0,
+      fat_g: parseFloat(document.getElementById('mealF').value) || 0,
+      carbs_g: parseFloat(document.getElementById('mealC').value) || 0,
     });
-    closeMealModal();
-    toast('记录已保存 ✓');
+    closeModal('mealModal');
+    toast('记录已保存');
     loadDashboard();
-  } catch (e) {
-    toast('保存失败: ' + e.message);
-  }
+  } catch (e) { toast('保存失败: ' + e.message); }
 }
 
-// ===== Exercise =====
-function openAddExercise() { document.getElementById('exerciseModal').classList.add('active'); }
-function closeExerciseModal() { document.getElementById('exerciseModal').classList.remove('active'); }
+// ===== Add Exercise =====
+function openAddExercise() {
+  document.getElementById('exerciseModal').classList.add('active');
+  document.getElementById('exName').value = '';
+  document.getElementById('exDur').value = '';
+  document.getElementById('exBurn').value = '';
+  document.getElementById('exSets').value = '';
+}
+
+function pickIntensity(el) {
+  document.querySelectorAll('#exerciseModal .pill').forEach(function(p) { p.classList.remove('active'); });
+  el.classList.add('active');
+  selectedIntensity = el.dataset.int;
+}
 
 async function saveExercise() {
-  const name = document.getElementById('exName').value.trim();
+  var name = document.getElementById('exName').value.trim();
   if (!name) { toast('请输入运动名称'); return; }
   try {
     await api('POST', '/exercise/records', {
-      record_date: today(),
+      record_date: currentDate,
       exercise_type: 'cardio',
       exercise_name: name,
-      duration_minutes: parseInt(document.getElementById('exDuration').value) || 30,
-      calories_burned: parseFloat(document.getElementById('exCalories').value) || 0,
+      duration_minutes: parseInt(document.getElementById('exDur').value) || 30,
+      calories_burned: parseFloat(document.getElementById('exBurn').value) || 0,
+      intensity: selectedIntensity,
       sets: parseInt(document.getElementById('exSets').value) || 0,
     });
-    closeExerciseModal();
-    toast('运动记录已保存 ✓');
-    loadExercises();
+    closeModal('exerciseModal');
+    toast('运动记录已保存');
     loadDashboard();
-  } catch (e) {
-    toast('保存失败: ' + e.message);
-  }
-}
-
-async function loadExercises() {
-  try {
-    const res = await api('GET', `/exercise/records?record_date=${today()}`);
-    const list = res.data || [];
-    const el = document.getElementById('exerciseList');
-    if (list.length === 0) {
-      el.innerHTML = '<div class="empty-state"><div class="icon">🏋️</div><div class="text">今天还没有运动记录<br>开始你的第一个训练吧！</div></div>';
-      return;
-    }
-    el.innerHTML = list.map(e => `
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-icon">${e.exercise_type === 'cardio' ? '🏃' : '🏋️'}</span>
-          <span class="exercise-name">${e.exercise_name}</span>
-        </div>
-        <div class="exercise-meta">
-          <span>⏱ <strong>${e.duration_minutes || 0}</strong> 分钟</span>
-          <span>🔥 <strong>${Math.round(e.calories_burned || 0)}</strong> kcal</span>
-          ${e.sets ? `<span>💪 <strong>${e.sets}</strong> 组</span>` : ''}
-        </div>
-      </div>
-    `).join('');
-  } catch (e) {
-    console.error('Exercise error:', e);
-  }
+  } catch (e) { toast('保存失败: ' + e.message); }
 }
 
 // ===== Sleep =====
-function setSleepQuality(val) {
-  sleepQualityVal = val;
-  const stars = document.querySelectorAll('#sleepStars .sleep-star');
-  stars.forEach((s, i) => s.textContent = i < val ? '⭐' : '☆');
+function openAddSleep() {
+  document.getElementById('sleepModal').classList.add('active');
 }
 
-async function recordSleep() {
-  const start = document.getElementById('sleepStart').value;
-  const end = document.getElementById('sleepEnd').value;
+function setSlpQ(val) {
+  sleepQuality = val;
+  var stars = document.querySelectorAll('#sleepStars span');
+  stars.forEach(function(s, i) { s.textContent = i < val ? '\u2B50' : '\u2606'; });
+}
+
+async function saveSleep() {
+  var start = document.getElementById('slpStart').value;
+  var end = document.getElementById('slpEnd').value;
   if (!start || !end) { toast('请选择时间'); return; }
-
-  const [sh, sm] = start.split(':').map(Number);
-  const [eh, em] = end.split(':').map(Number);
-  let mins = (eh * 60 + em) - (sh * 60 + sm);
-  if (mins < 0) mins += 24 * 60;
-
+  var sh = parseInt(start.split(':')[0]), sm = parseInt(start.split(':')[1]);
+  var eh = parseInt(end.split(':')[0]), em = parseInt(end.split(':')[1]);
+  var mins = (eh * 60 + em) - (sh * 60 + sm);
+  if (mins < 0) mins += 1440;
   try {
     await api('POST', '/sleep/records', {
-      record_date: today(),
-      sleep_start: `${today()}T${start}:00`,
-      sleep_end: `${today()}T${end}:00`,
+      record_date: currentDate,
+      sleep_start: currentDate + 'T' + start + ':00',
+      sleep_end: currentDate + 'T' + end + ':00',
       duration_minutes: mins,
-      quality: sleepQualityVal,
+      quality: sleepQuality,
     });
-    toast('睡眠记录已保存 ✓');
+    closeModal('sleepModal');
+    toast('睡眠记录已保存');
     loadDashboard();
-  } catch (e) {
-    toast('保存失败: ' + e.message);
-  }
+  } catch (e) { toast('保存失败: ' + e.message); }
 }
 
 // ===== Weight =====
 async function recordWeight() {
-  const w = parseFloat(document.getElementById('weightInput').value);
+  var w = parseFloat(document.getElementById('weightInput').value);
   if (!w || w < 20 || w > 300) { toast('请输入合理体重'); return; }
   try {
-    await api('POST', '/body-metrics', {
-      record_date: today(),
-      weight_kg: w,
-    });
-    document.getElementById('weightStatus').textContent = `已记录: ${w} kg`;
+    await api('POST', '/body/metrics', { record_date: currentDate, weight_kg: w });
+    document.getElementById('weightStatus').textContent = '已记录: ' + w + ' kg';
     document.getElementById('weightInput').value = '';
-    toast('体重已记录 ✓');
+    toast('体重已记录');
+    loadDashboard();
+  } catch (e) { toast('保存失败: ' + e.message); }
+}
+
+// ===== Photo Recognition =====
+function openRecognition() {
+  document.getElementById('recogModal').classList.add('active');
+  document.getElementById('recogPreview').style.display = 'none';
+  document.getElementById('recogLoading').style.display = 'none';
+  recogType = 'food';
+  document.querySelectorAll('#recogModal .pill').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.rtype === 'food');
+  });
+}
+
+function pickRecogType(el) {
+  document.querySelectorAll('#recogModal .pill').forEach(function(p) { p.classList.remove('active'); });
+  el.classList.add('active');
+  recogType = el.dataset.rtype;
+}
+
+function triggerCamera() { document.getElementById('cameraInput').click(); }
+function triggerGallery() { document.getElementById('galleryInput').click(); }
+
+async function handleImagePick(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  event.target.value = '';
+
+  // Show preview
+  var url = URL.createObjectURL(file);
+  document.getElementById('recogImg').src = url;
+  document.getElementById('recogPreview').style.display = 'block';
+  document.getElementById('recogLoading').style.display = 'flex';
+
+  // Upload for recognition
+  var formData = new FormData();
+  formData.append('file', file);
+
+  var endpoint = recogType === 'food' ? '/ai/recognize/food/upload' : '/ai/recognize/exercise/upload';
+
+  try {
+    var res = await fetch(API + endpoint, {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token },
+      body: formData,
+    });
+    var data = await res.json();
+    if (!res.ok) throw new Error(data.detail || '识别失败');
+
+    document.getElementById('recogLoading').style.display = 'none';
+    closeModal('recogModal');
+
+    // Show result
+    recogData = data.data;
+    showRecogResult();
   } catch (e) {
-    toast('保存失败: ' + e.message);
+    document.getElementById('recogLoading').style.display = 'none';
+    toast('识别失败: ' + e.message);
+  }
+}
+
+function showRecogResult() {
+  document.getElementById('recogResultModal').classList.add('active');
+  var el = document.getElementById('recogResultContent');
+  var mealTypeEl = document.getElementById('recogMealType');
+
+  if (recogType === 'food' && recogData.foods) {
+    document.getElementById('recogResultTitle').textContent = '食物识别结果';
+    mealTypeEl.style.display = 'block';
+    var html = '<div class="recog-foods">';
+    recogData.foods.forEach(function(f, i) {
+      html += '<div class="recog-food">' +
+        '<div class="recog-food-head">' +
+        '<span class="recog-food-name">' + f.name + '</span>' +
+        '<span class="recog-food-conf">' + (f.estimated_serving || '') + '</span>' +
+        '</div>' +
+        '<div class="recog-food-grid">' +
+        '<div class="fg"><label>热量</label><input type="number" id="rf_cal_' + i + '" value="' + Math.round(f.calories) + '"></div>' +
+        '<div class="fg"><label>蛋白质</label><input type="number" id="rf_p_' + i + '" value="' + Math.round(f.protein_g) + '" step="0.1"></div>' +
+        '<div class="fg"><label>脂肪</label><input type="number" id="rf_f_' + i + '" value="' + Math.round(f.fat_g) + '" step="0.1"></div>' +
+        '<div class="fg"><label>碳水</label><input type="number" id="rf_c_' + i + '" value="' + Math.round(f.carbs_g) + '" step="0.1"></div>' +
+        '</div></div>';
+    });
+    html += '</div>';
+    html += '<div style="background:var(--accent-bg);border-radius:var(--radius-xs);padding:10px;text-align:center;font-size:14px;">' +
+      '总热量: <strong>' + Math.round(recogData.total_calories) + '</strong> kcal' +
+      '<div style="font-size:12px;color:var(--text-secondary);margin-top:4px;">数值可编辑，觉得不准确请直接修改</div>' +
+      '</div>';
+    el.innerHTML = html;
+
+    // Auto-select meal type based on time
+    var hour = new Date().getHours();
+    if (hour < 10) recogMealType = 'breakfast';
+    else if (hour < 14) recogMealType = 'lunch';
+    else if (hour < 20) recogMealType = 'dinner';
+    else recogMealType = 'snack';
+    document.querySelectorAll('#recogMealPills .pill').forEach(function(p) {
+      p.classList.toggle('active', p.dataset.type === recogMealType);
+    });
+
+  } else if (recogType === 'exercise' && recogData.exercise) {
+    document.getElementById('recogResultTitle').textContent = '运动识别结果';
+    mealTypeEl.style.display = 'none';
+    var ex = recogData.exercise;
+    var html = '<div class="recog-food">' +
+      '<div class="recog-food-head"><span class="recog-food-name">' + ex.exercise_name + '</span></div>' +
+      '<div class="recog-food-grid" style="grid-template-columns:1fr 1fr 1fr;">' +
+      '<div class="fg"><label>时长(分)</label><input type="number" id="re_dur" value="' + (ex.estimated_duration_min || 30) + '"></div>' +
+      '<div class="fg"><label>消耗</label><input type="number" id="re_cal" value="' + Math.round(ex.calories_burned) + '"></div>' +
+      '<div class="fg"><label>强度</label><input type="text" id="re_int" value="' + (ex.intensity || 'medium') + '"></div>' +
+      '</div></div>';
+    el.innerHTML = html;
+  }
+}
+
+function pickRecogMealType(el) {
+  document.querySelectorAll('#recogMealPills .pill').forEach(function(p) { p.classList.remove('active'); });
+  el.classList.add('active');
+  recogMealType = el.dataset.type;
+}
+
+async function saveRecogResult() {
+  try {
+    if (recogType === 'food' && recogData.foods) {
+      for (var i = 0; i < recogData.foods.length; i++) {
+        var f = recogData.foods[i];
+        await api('POST', '/diet/records', {
+          record_date: currentDate,
+          meal_type: recogMealType,
+          food_name: f.name,
+          calories: parseFloat(document.getElementById('rf_cal_' + i).value) || 0,
+          protein_g: parseFloat(document.getElementById('rf_p_' + i).value) || 0,
+          fat_g: parseFloat(document.getElementById('rf_f_' + i).value) || 0,
+          carbs_g: parseFloat(document.getElementById('rf_c_' + i).value) || 0,
+          serving_size: f.estimated_serving || '',
+          source: 'ai_image',
+        });
+      }
+      toast('已保存 ' + recogData.foods.length + ' 项食物');
+    } else if (recogType === 'exercise' && recogData.exercise) {
+      var ex = recogData.exercise;
+      await api('POST', '/exercise/records', {
+        record_date: currentDate,
+        exercise_type: ex.exercise_type || 'cardio',
+        exercise_name: ex.exercise_name,
+        duration_minutes: parseInt(document.getElementById('re_dur').value) || 30,
+        calories_burned: parseFloat(document.getElementById('re_cal').value) || 0,
+        intensity: document.getElementById('re_int').value || 'medium',
+        source: 'ai_image',
+      });
+      toast('运动记录已保存');
+    }
+    closeModal('recogResultModal');
+    loadDashboard();
+  } catch (e) { toast('保存失败: ' + e.message); }
+}
+
+// ===== Chat =====
+async function loadChatSessions() {
+  try {
+    var res = await api('GET', '/ai/chat/sessions');
+    var sessions = res.data || [];
+    var el = document.getElementById('chatSessionList');
+    if (sessions.length === 0) {
+      el.innerHTML = '<div class="empty"><div class="ico">\u{1F4AC}</div><div class="txt">开始你的第一次对话<br>AI 助手将为你提供健康建议</div></div>';
+      return;
+    }
+    el.innerHTML = sessions.map(function(s) {
+      var t = new Date(s.updated_at);
+      var timeStr = (t.getMonth() + 1) + '/' + t.getDate() + ' ' + t.getHours() + ':' + String(t.getMinutes()).padStart(2, '0');
+      return '<div class="chat-list-item" onclick="openChatSession(\'' + s.id + '\', \'' + s.title.replace(/'/g, "\\'") + '\')">' +
+        '<div class="chat-list-title">' + s.title + '</div>' +
+        '<div class="chat-list-time">' + timeStr + '</div></div>';
+    }).join('');
+  } catch (e) { console.error('Chat sessions err:', e); }
+}
+
+async function createChatSession() {
+  try {
+    var res = await api('POST', '/ai/chat/sessions');
+    var session = res.data;
+    openChatSession(session.id, session.title);
+  } catch (e) { toast('创建对话失败: ' + e.message); }
+}
+
+async function openChatSession(id, title) {
+  currentSessionId = id;
+  document.getElementById('chatViewTitle').textContent = title || '对话';
+  document.getElementById('chatView').classList.add('active');
+  document.getElementById('chatMessages').innerHTML = '';
+  document.getElementById('chatInput').value = '';
+
+  try {
+    var res = await api('GET', '/ai/chat/sessions/' + id + '/messages');
+    var msgs = res.data || [];
+    var container = document.getElementById('chatMessages');
+    if (msgs.length === 0) {
+      container.innerHTML = '<div class="msg assistant"><div class="msg-bubble">你好！我是你的 AI 健康助手。可以问我关于饮食、运动、健康计划的任何问题！</div></div>';
+    } else {
+      container.innerHTML = msgs.map(function(m) {
+        return '<div class="msg ' + m.role + '"><div class="msg-bubble">' + escapeHtml(m.content) + '</div></div>';
+      }).join('');
+    }
+    container.scrollTop = container.scrollHeight;
+  } catch (e) { console.error('Load messages err:', e); }
+}
+
+function closeChatView() {
+  document.getElementById('chatView').classList.remove('active');
+  currentSessionId = null;
+  loadChatSessions();
+}
+
+function escapeHtml(text) {
+  var div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+async function sendChat() {
+  if (chatStreaming) return;
+  var input = document.getElementById('chatInput');
+  var msg = input.value.trim();
+  if (!msg || !currentSessionId) return;
+
+  input.value = '';
+  chatStreaming = true;
+  document.getElementById('chatSendBtn').disabled = true;
+
+  var container = document.getElementById('chatMessages');
+
+  // Add user message
+  container.innerHTML += '<div class="msg user"><div class="msg-bubble">' + escapeHtml(msg) + '</div></div>';
+
+  // Add assistant placeholder
+  var assistantDiv = document.createElement('div');
+  assistantDiv.className = 'msg assistant';
+  var bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.textContent = '...';
+  assistantDiv.appendChild(bubble);
+  container.appendChild(assistantDiv);
+  container.scrollTop = container.scrollHeight;
+
+  try {
+    var response = await fetch(API + '/ai/chat/sessions/' + currentSessionId + '/messages', {
+      method: 'POST',
+      headers: hdrs(),
+      body: JSON.stringify({ content: msg }),
+    });
+
+    var reader = response.body.getReader();
+    var decoder = new TextDecoder();
+    var fullText = '';
+
+    while (true) {
+      var result = await reader.read();
+      if (result.done) break;
+      var chunk = decoder.decode(result.value, { stream: true });
+      var lines = chunk.split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+        if (line.startsWith('data: ')) {
+          var data = line.substring(6);
+          if (data === '[DONE]') continue;
+          if (data.startsWith('[ERROR]')) {
+            fullText += ' (错误: ' + data.substring(8) + ')';
+            continue;
+          }
+          fullText += data;
+          bubble.textContent = fullText;
+          container.scrollTop = container.scrollHeight;
+        }
+      }
+    }
+  } catch (e) {
+    bubble.textContent = '发送失败: ' + e.message;
+  }
+
+  chatStreaming = false;
+  document.getElementById('chatSendBtn').disabled = false;
+}
+
+// ===== Statistics =====
+function setStatPeriod(days, btn) {
+  statDays = days;
+  document.querySelectorAll('.stat-period-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  loadStats();
+}
+
+async function loadStats() {
+  loadCalorieTrend();
+  loadWeightTrend();
+  loadActivePlan();
+}
+
+async function loadCalorieTrend() {
+  try {
+    var res = await api('GET', '/stats/calorie-trend?days=' + statDays);
+    var data = res.data;
+    drawBarChart('calChart', data.points || [], data.average, 'var(--primary)');
+    var el = document.getElementById('calChartSummary');
+    if (data.average) {
+      el.innerHTML = '<span class="chart-summary-item">平均: <strong>' + Math.round(data.average) + ' kcal</strong></span>';
+    } else {
+      el.innerHTML = '<span class="chart-summary-item">暂无数据</span>';
+    }
+  } catch (e) { console.error('Calorie trend err:', e); }
+}
+
+async function loadWeightTrend() {
+  try {
+    var res = await api('GET', '/stats/weight-trend?days=' + statDays);
+    var data = res.data;
+    drawLineChart('wtChart', data.points || [], 'var(--accent)');
+    var el = document.getElementById('wtChartSummary');
+    if (data.min_value && data.max_value) {
+      el.innerHTML = '<span class="chart-summary-item">最低: <strong>' + data.min_value + ' kg</strong></span>' +
+        '<span class="chart-summary-item">最高: <strong>' + data.max_value + ' kg</strong></span>';
+    } else {
+      el.innerHTML = '<span class="chart-summary-item">暂无数据</span>';
+    }
+  } catch (e) { console.error('Weight trend err:', e); }
+}
+
+function drawBarChart(svgId, points, avg, color) {
+  var svg = document.getElementById(svgId);
+  if (!points.length) { svg.innerHTML = '<text x="160" y="60" text-anchor="middle" fill="#C7C7CC" font-size="13">暂无数据</text>'; return; }
+  var w = 320, h = 120, pad = 20;
+  var maxVal = Math.max.apply(null, points.map(function(p) { return p.value; })) || 1;
+  var barW = Math.min(30, (w - pad * 2) / points.length - 4);
+  var html = '';
+  points.forEach(function(p, i) {
+    var x = pad + i * ((w - pad * 2) / points.length) + ((w - pad * 2) / points.length - barW) / 2;
+    var barH = (p.value / maxVal) * (h - pad * 2);
+    var y = h - pad - barH;
+    html += '<rect x="' + x + '" y="' + y + '" width="' + barW + '" height="' + barH + '" rx="3" fill="' + color + '" opacity="0.7"/>';
+    // Date label
+    var d = new Date(p.date + 'T00:00:00');
+    html += '<text x="' + (x + barW / 2) + '" y="' + (h - 4) + '" text-anchor="middle" fill="#8E8E93" font-size="9">' + (d.getMonth() + 1) + '/' + d.getDate() + '</text>';
+  });
+  if (avg) {
+    var avgY = h - pad - (avg / maxVal) * (h - pad * 2);
+    html += '<line x1="' + pad + '" y1="' + avgY + '" x2="' + (w - pad) + '" y2="' + avgY + '" stroke="#C7C7CC" stroke-dasharray="4,3" stroke-width="1"/>';
+  }
+  svg.innerHTML = html;
+}
+
+function drawLineChart(svgId, points, color) {
+  var svg = document.getElementById(svgId);
+  if (!points.length) { svg.innerHTML = '<text x="160" y="60" text-anchor="middle" fill="#C7C7CC" font-size="13">暂无数据</text>'; return; }
+  var w = 320, h = 120, pad = 20;
+  var vals = points.map(function(p) { return p.value; });
+  var minV = Math.min.apply(null, vals);
+  var maxV = Math.max.apply(null, vals);
+  var range = maxV - minV || 1;
+
+  var pathParts = [];
+  var dots = '';
+  points.forEach(function(p, i) {
+    var x = pad + i * ((w - pad * 2) / (points.length - 1 || 1));
+    var y = h - pad - ((p.value - minV) / range) * (h - pad * 2);
+    pathParts.push((i === 0 ? 'M' : 'L') + x + ',' + y);
+    dots += '<circle cx="' + x + '" cy="' + y + '" r="3" fill="' + color + '"/>';
+    var d = new Date(p.date + 'T00:00:00');
+    dots += '<text x="' + x + '" y="' + (h - 4) + '" text-anchor="middle" fill="#8E8E93" font-size="9">' + (d.getMonth() + 1) + '/' + d.getDate() + '</text>';
+  });
+
+  var html = '<path d="' + pathParts.join(' ') + '" fill="none" stroke="' + color + '" stroke-width="2" stroke-linejoin="round"/>' + dots;
+  svg.innerHTML = html;
+}
+
+async function loadActivePlan() {
+  try {
+    var res = await api('GET', '/plans/active');
+    var plan = res.data;
+    var el = document.getElementById('planArea');
+    if (!plan) {
+      el.innerHTML = '<div style="text-align:center;padding:20px;">' +
+        '<div style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;">还没有健身计划</div>' +
+        '<button class="btn btn-primary btn-sm" style="width:auto;padding:10px 24px;" onclick="openGenPlan()">生成 AI 计划</button></div>';
+      return;
+    }
+    var goals = { lose_weight: '减脂', gain_muscle: '增肌', maintain: '保持' };
+    el.innerHTML = '<div class="plan-card">' +
+      '<div class="ttl">' + (goals[plan.goal_type] || plan.goal_type) + '计划 \u00B7 ' + plan.duration_weeks + '周</div>' +
+      '<div class="plan-grid">' +
+      '<div class="plan-item"><div class="v">' + (plan.daily_calorie_target || '--') + '</div><div class="l">每日热量(kcal)</div></div>' +
+      '<div class="plan-item"><div class="v">' + (plan.daily_exercise_minutes || '--') + '</div><div class="l">每日运动(分钟)</div></div>' +
+      '<div class="plan-item"><div class="v">' + (plan.daily_protein_target || '--') + '</div><div class="l">蛋白质(g)</div></div>' +
+      '<div class="plan-item"><div class="v">' + (plan.calorie_deficit || '--') + '</div><div class="l">热量缺口(kcal)</div></div>' +
+      '</div></div>' +
+      '<button class="btn btn-outline btn-sm" style="width:auto" onclick="openGenPlan()">重新生成</button>';
+  } catch (e) { console.error('Plan err:', e); }
+}
+
+function openGenPlan() {
+  document.getElementById('planModal').classList.add('active');
+}
+
+function pickPlanGoal(el) {
+  document.querySelectorAll('#planGoalPills .pill').forEach(function(p) { p.classList.remove('active'); });
+  el.classList.add('active');
+  planGoalType = el.dataset.goal;
+}
+
+async function generatePlan() {
+  var btn = document.getElementById('genPlanBtn');
+  btn.textContent = '生成中...';
+  btn.disabled = true;
+  try {
+    await api('POST', '/plans/generate', {
+      goal_type: planGoalType,
+      duration_weeks: parseInt(document.getElementById('planWeeks').value) || 4,
+    });
+    closeModal('planModal');
+    toast('健身计划已生成');
+    loadActivePlan();
+    // Refresh user data since calorie target may have changed
+    var me = await api('GET', '/users/me');
+    currentUser = me.data;
+    loadDashboard();
+  } catch (e) {
+    toast('生成失败: ' + e.message);
+  } finally {
+    btn.textContent = '生成计划';
+    btn.disabled = false;
   }
 }
 
 // ===== Profile =====
 async function loadProfile() {
   try {
-    const res = await api('GET', '/users/me');
-    const u = res.data;
+    var res = await api('GET', '/users/me');
+    var u = res.data;
     currentUser = u;
-    document.getElementById('profileName').textContent = u.nickname || '未设置昵称';
-    document.getElementById('profilePhone').textContent = u.phone;
-    document.getElementById('pHeight').textContent = u.height_cm || '--';
-    document.getElementById('pWeight').textContent = u.current_weight_kg || '--';
-    const goals = { lose_weight: '减脂', build_muscle: '增肌', maintain: '保持', improve_health: '健康' };
-    document.getElementById('pGoal').textContent = goals[u.fitness_goal] || '--';
-    document.getElementById('pCalTarget').textContent = (u.daily_calorie_target || 2000) + ' kcal ›';
-  } catch (e) {
-    console.error('Profile error:', e);
-  }
+    document.getElementById('profName').textContent = u.nickname || '未设置昵称';
+    document.getElementById('profPhone').textContent = u.phone;
+    document.getElementById('profH').textContent = u.height_cm || '--';
+    document.getElementById('profW').textContent = u.current_weight_kg || '--';
+    var goals = { lose_weight: '减脂', build_muscle: '增肌', maintain: '保持', improve_health: '健康' };
+    document.getElementById('profG').textContent = goals[u.fitness_goal] || '--';
+    document.getElementById('profCal').textContent = (u.daily_calorie_target || 2000) + ' kcal \u203A';
+    var providers = { kimi: 'Kimi', gemini: 'Gemini', auto: '自动' };
+    document.getElementById('profAi').textContent = (providers[u.ai_provider] || 'Kimi') + ' \u203A';
+  } catch (e) { console.error('Profile err:', e); }
 }
 
 function openEditProfile() {
   document.getElementById('profileModal').classList.add('active');
   if (currentUser) {
-    document.getElementById('editHeight').value = currentUser.height_cm || '';
-    document.getElementById('editWeight').value = currentUser.current_weight_kg || '';
-    document.getElementById('editTarget').value = currentUser.target_weight_kg || '';
+    document.getElementById('editH').value = currentUser.height_cm || '';
+    document.getElementById('editW').value = currentUser.current_weight_kg || '';
+    document.getElementById('editTW').value = currentUser.target_weight_kg || '';
+    selectedGoal = currentUser.fitness_goal || 'lose_weight';
+    document.querySelectorAll('#goalPills .pill').forEach(function(p) {
+      p.classList.toggle('active', p.dataset.goal === selectedGoal);
+    });
   }
 }
-function closeProfileModal() { document.getElementById('profileModal').classList.remove('active'); }
 
-function selectGoal(el) {
-  document.querySelectorAll('#profileModal .meal-type-btn').forEach(b => b.classList.remove('active'));
+function pickGoal(el) {
+  document.querySelectorAll('#goalPills .pill').forEach(function(p) { p.classList.remove('active'); });
   el.classList.add('active');
   selectedGoal = el.dataset.goal;
 }
@@ -1032,27 +1723,42 @@ function selectGoal(el) {
 async function saveProfile() {
   try {
     await api('PUT', '/users/me', {
-      height_cm: parseFloat(document.getElementById('editHeight').value) || null,
-      current_weight_kg: parseFloat(document.getElementById('editWeight').value) || null,
-      target_weight_kg: parseFloat(document.getElementById('editTarget').value) || null,
+      height_cm: parseFloat(document.getElementById('editH').value) || null,
+      current_weight_kg: parseFloat(document.getElementById('editW').value) || null,
+      target_weight_kg: parseFloat(document.getElementById('editTW').value) || null,
       fitness_goal: selectedGoal,
     });
-    closeProfileModal();
-    toast('个人信息已更新 ✓');
+    closeModal('profileModal');
+    toast('个人信息已更新');
     loadProfile();
-  } catch (e) {
-    toast('保存失败: ' + e.message);
+  } catch (e) { toast('保存失败: ' + e.message); }
+}
+
+function openCalTarget() {
+  var target = prompt('设置每日卡路里目标 (kcal):', (currentUser && currentUser.daily_calorie_target) || 2000);
+  if (target && !isNaN(parseInt(target))) {
+    api('PUT', '/users/me', { daily_calorie_target: parseInt(target) })
+      .then(function() { toast('目标已更新'); loadProfile(); loadDashboard(); })
+      .catch(function(e) { toast('更新失败: ' + e.message); });
   }
 }
 
+function openAiPref() {
+  var current = (currentUser && currentUser.ai_provider) || 'kimi';
+  var next = current === 'kimi' ? 'gemini' : current === 'gemini' ? 'auto' : 'kimi';
+  api('PUT', '/users/me', { ai_provider: next })
+    .then(function() { toast('AI 服务已切换为 ' + next); loadProfile(); })
+    .catch(function(e) { toast('更新失败: ' + e.message); });
+}
+
 // ===== Init =====
-document.getElementById('tabBar').classList.add('hidden');
 if (token) {
-  // Try auto-login with saved token
-  api('GET', '/users/me').then(() => enterApp()).catch(() => {
-    token = ''; localStorage.removeItem('gs_token');
+  api('GET', '/users/me').then(function() { enterApp(); }).catch(function() {
+    token = '';
+    localStorage.removeItem('gs_token');
   });
 }
+
 </script>
 </body>
 </html>
